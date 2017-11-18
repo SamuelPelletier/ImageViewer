@@ -2,7 +2,7 @@
 <html lang="en">
 <?php include '../php/service.php'; ?>
 <link href="css/main.css" rel="stylesheet">
-<div id="wrapper" class="toggled">
+<div id="wrapper">
 
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
@@ -42,8 +42,16 @@
 
             <div class="row text-center text-lg-left">
                 <?php
+                $parts = parse_url($_SERVER['HTTP_REFERER']);
+                parse_str($parts['path'], $path);
+                $path = array_keys($path)[0];
+                if(preg_match('/^\/[0-9]+$/', $path)){
+                    displayImages(ltrim($path,"/"));
+                }else{
                     home_page_image();
+                }
                 ?>
+
             </div>
 
 
@@ -52,9 +60,19 @@
 
     <!-- Menu Toggle Script -->
     <script>
+        if (sessionStorage.getItem("menu_toggled") == ("open" || "false") && $("#wrapper").hasClass('toggled') == false){
+            $("#wrapper").addClass('toggled')
+            sessionStorage.setItem("menu_toggled","open")
+        }
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
+            console.log(sessionStorage.getItem("menu_toggled"))
+            if(sessionStorage.getItem("menu_toggled") == "close"){
+                sessionStorage.setItem("menu_toggled","open")
+            }else{
+                sessionStorage.setItem("menu_toggled","close")
+            }
         });
     </script>
 </div>
