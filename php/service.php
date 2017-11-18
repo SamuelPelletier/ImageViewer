@@ -7,12 +7,22 @@
  */
 
 const PATH = "../Photo/";
+const PAGINATION = 22;
 
 function home_page_image()
 {
     $tabs = scandir(PATH);
-    //var_dump($tabs);
-    for ($i = 0; $i < 22; $i++) {
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    $page = 1;
+    if (array_key_exists('query', $parts)) {
+        parse_str($parts['query'], $query);
+        $page = $query["page"];
+    }
+    echo '<script>createPagination('.PAGINATION.','.sizeof($tabs).','.$page.')</script>';
+    //var_dump($page);
+    $tabs = array_slice($tabs, ($page-1)*PAGINATION);
+    $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
+    for ($i = 0; $i < $size; $i++) {
         if ($tabs[$i] != "." && $tabs[$i] != "..") {
             if ($i % 4 == 0) {
                 echo "\n";
@@ -26,5 +36,4 @@ function home_page_image()
                 </div>';
         }
     }
-
 }

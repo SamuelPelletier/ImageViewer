@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php include '../php/service.php'; ?>
-<script src="js/paginator.js"></script>
 <link href="css/main.css" rel="stylesheet">
 <div id="wrapper" class="toggled">
 
@@ -42,9 +41,8 @@
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
 
             <div class="row text-center text-lg-left">
-
                 <?php
-                home_page_image();
+                    home_page_image();
                 ?>
             </div>
 
