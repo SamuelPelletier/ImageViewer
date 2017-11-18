@@ -40,14 +40,14 @@ function home_page_image()
 
 function displayImages($path){
     $tabs = scandirByModifiedDate(PATH);
-    $path = PATH ."/".$tabs[sizeof($tabs) - $path];
+    $path = PATH .$tabs[sizeof($tabs) - $path];
     $tabs = array_diff(scandir($path),array(".",".."));
     for ($i = 2; $i < sizeof($tabs)+2; $i++) {
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell">
+                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer('.$i.',\''.$path.'/'.$tabs[$i].'\')">
                         <h5 class="img-name">' . $tabs[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="'.$path ."/" .$tabs[$i] . '" alt="">
+                        <img class="img-fluid img-thumbnail" src="'.$path .'/' .$tabs[$i] . '" alt="">
                     </a>
                 </div>';
     }

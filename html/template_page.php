@@ -13,7 +13,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">Dashboard</a>
+                <a href="/">Dashboard</a>
             </li>
             <li>
                 <a href="#">Shortcuts</a>

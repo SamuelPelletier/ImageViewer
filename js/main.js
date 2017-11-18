@@ -23,3 +23,12 @@ function createPagination(pagination, nbrItems, page) {
     }
     $('.pagination').append('  <li><a href="?page=' + pageNext + '" class="next">&raquo;</a></li>')
 }
+
+function viewer(imageNumber, path){
+    $("body").append("<div class='viewer'><img src='"+path+"'></div>")
+    $("body").css("overflow","hidden")
+    $("#viewer").click(function(){
+        $("#viewer").remove()
+    })
+}
+
