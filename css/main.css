@@ -145,5 +145,13 @@ li:last-child .page {
     top: 25%;
     left: 25%;
     position: absolute;
-    z-index: 1002;
+}
+
+.cross{
+    background-color: red;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }

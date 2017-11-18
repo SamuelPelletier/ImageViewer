@@ -25,10 +25,10 @@ function createPagination(pagination, nbrItems, page) {
 }
 
 function viewer(imageNumber, path){
-    $("body").append("<div class='viewer'><img src='"+path+"'></div>")
+    $("body").append("<div class='viewer'><div class='cross'></div><img src='"+path+"'></div>")
     $("body").css("overflow","hidden")
-    $("#viewer").click(function(){
-        $("#viewer").remove()
+    $(".cross").click(function(){
+        $(".viewer").remove()
     })
 }
 
