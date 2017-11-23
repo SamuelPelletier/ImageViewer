@@ -137,21 +137,67 @@ li:last-child .page {
     position: fixed;
     top: 0;
     background-color: black;
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.viewer > img {
-    width: 50%;
-    height: 50%;
-    top: 25%;
-    left: 25%;
-    position: absolute;
+.container-img{
+    margin: auto auto;
+    top: 10%;
+    position: relative;
+    height: 80%;
+}
+
+.container-img > img {
+    height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.control{
+    width: 320px;
+    margin:auto;
+    display: flex;
+    padding-top: 1.5%;
+}
+
+.control > div{
+    margin: auto auto;
+    display: inline-block;
+    height: 40px;
+    width: 40px;
 }
 
 .cross{
-    background-color: red;
-    height: 40px;
-    width: 40px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
+     background-color: red;
+     height: 40px;
+     width: 40px;
+     position: absolute;
+     right: 10px;
+     top: 10px;
+ }
+
+.full-back{
+     background-color: green;
+ }
+
+.back{
+    background-color: pink;
+}
+
+.start{
+    background-color: orange;
+}
+
+.pause{
+    background-color: maroon;
+}
+
+.next{
+    background-color: blue;
+}
+
+.full-next{
+    background-color: yellow;
 }

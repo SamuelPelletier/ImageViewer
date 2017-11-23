@@ -24,11 +24,30 @@ function createPagination(pagination, nbrItems, page) {
     $('.pagination').append('  <li><a href="?page=' + pageNext + '" class="next">&raquo;</a></li>')
 }
 
-function viewer(imageNumber, path){
-    $("body").append("<div class='viewer'><div class='cross'></div><img src='"+path+"'></div>")
+function viewer(path){
+    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
     $("body").css("overflow","hidden")
     $(".cross").click(function(){
         $(".viewer").remove()
     })
+    var pdfFilesDirectory = '../Photo/Troisieme/';
+
+// get auto-generated page
+    $.ajax({url: pdfFilesDirectory}).then(function(html) {
+        // create temporary DOM element
+        var document = $(html);
+        document.find('a[href$=.jpg]').each(function() {
+            var pdfName = $(this).text();
+            var pdfUrl = $(this).attr('href');
+            console.log(pdfUrl)
+            // do what you want here
+        })
+    });
+
+
 }
 
+function goTo(path){
+    $(".container-img > img").remove()
+    $(".container-img").prepend("<img src='"+path+"'>")
+}

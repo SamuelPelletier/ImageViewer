@@ -43,10 +43,11 @@ function displayImages($path){
     $path = PATH .$tabs[sizeof($tabs) - $path];
     $tabs = array_diff(scandir($path),array(".",".."));
     for ($i = 2; $i < sizeof($tabs)+2; $i++) {
+        $name = preg_replace('/\\.[^.\\s]{3,4}$/', '', $tabs[$i]);
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer('.$i.',\''.$path.'/'.$tabs[$i].'\')">
-                        <h5 class="img-name">' . $tabs[$i] . '</h5>
+                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(\''.$path.'/'.$tabs[$i].'\')">
+                        <h5 class="img-name">' . $name . '</h5>
                         <img class="img-fluid img-thumbnail" src="'.$path .'/' .$tabs[$i] . '" alt="">
                     </a>
                 </div>';
