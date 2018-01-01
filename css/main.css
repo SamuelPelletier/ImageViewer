@@ -34,6 +34,9 @@ a{
     line-height: normal;
     margin: 0;
     text-decoration: none;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .pagination {
@@ -156,7 +159,7 @@ li:last-child .page {
 }
 
 .control{
-    width: 320px;
+    width: 400px;
     margin:auto;
     display: flex;
     padding-top: 1.5%;

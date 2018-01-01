@@ -25,26 +25,37 @@ function createPagination(pagination, nbrItems, page) {
 }
 
 function viewer(path){
-    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
+    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='pause'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
     $("body").css("overflow","hidden")
+
     $(".cross").click(function(){
+        $("body").css("overflow","visible")
         $(".viewer").remove()
     })
-    var pdfFilesDirectory = '../Photo/Troisieme/';
 
-// get auto-generated page
-    $.ajax({url: pdfFilesDirectory}).then(function(html) {
-        // create temporary DOM element
-        var document = $(html);
-        document.find('a[href$=.jpg]').each(function() {
-            var pdfName = $(this).text();
-            var pdfUrl = $(this).attr('href');
-            console.log(pdfUrl)
-            // do what you want here
-        })
-    });
+    $(".full-back").click(function(){
+        console.log("full back")
+    })
 
+    $(".back").click(function(){
+        console.log("back")
+    })
 
+    $(".start").click(function(){
+        console.log("start")
+    })
+
+    $(".pause").click(function(){
+        console.log("pause")
+    })
+
+    $(".next").click(function(){
+        console.log("next")
+    })
+
+    $(".full-next").click(function(){
+        console.log("full next")
+    })
 }
 
 function goTo(path){
