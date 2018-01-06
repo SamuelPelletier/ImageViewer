@@ -52,6 +52,8 @@ function displayImages($path){
                     </a>
                 </div>';
     }
+    echo '
+    <div style="display:none;" id="list">'. json_encode($tabs).'</div>';
 }
 
 function scandirByModifiedDate($dir) {

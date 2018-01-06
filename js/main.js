@@ -1,11 +1,15 @@
 /**
  * Created by Samuel on 17/11/2017.
  */
+
+var imageList;
+
 $(document).ready(function () {
     $.get("../html/template_page.php", function (data) {
         $("body").append(data);
     });
 })
+
 function createPagination(pagination, nbrItems, page) {
 
     var nbrPage = Math.trunc(nbrItems / pagination)
@@ -25,7 +29,11 @@ function createPagination(pagination, nbrItems, page) {
 }
 
 function viewer(path){
-    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='pause'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
+    var intervalID;
+    var name = path.split("/").pop();
+    var onlyPath = path.substring(0,path.length - name.length)
+    getImageList()
+    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='pause'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
     $("body").css("overflow","hidden")
 
     $(".cross").click(function(){
@@ -34,28 +42,73 @@ function viewer(path){
     })
 
     $(".full-back").click(function(){
-        console.log("full back")
+        var firstName = imageList[0]
+        $(".imgViewer").attr("src",onlyPath.concat(firstName))
+        name = firstName
     })
 
     $(".back").click(function(){
-        console.log("back")
+        var predName = imageList[getPred(name)]
+        $(".imgViewer").attr("src",onlyPath.concat(predName))
+        name = predName
     })
 
     $(".start").click(function(){
-        console.log("start")
+        console.log(intervalID)
+        if(intervalID == undefined) {
+            intervalID = setInterval(function () {
+                var predName = imageList[getNext(name)]
+                $(".imgViewer").attr("src", onlyPath.concat(predName))
+                name = predName
+            }, 3500);
+        }
     })
 
     $(".pause").click(function(){
-        console.log("pause")
+        clearInterval(intervalID); // useless ?
+        intervalID = undefined
     })
 
     $(".next").click(function(){
-        console.log("next")
+        var nextName = imageList[getNext(name)]
+        $(".imgViewer").attr("src",onlyPath.concat(nextName))
+        name = nextName
     })
 
     $(".full-next").click(function(){
-        console.log("full next")
+        var lastName = imageList[imageList.length-1]
+        $(".imgViewer").attr("src",onlyPath.concat(lastName))
+        name = lastName
     })
+
+    $("img, .control").mouseover(function(){
+        $(".control").show()
+    })
+    $("img, .control").mouseout(function(){
+        $(".control").hide()
+    })
+}
+
+function getImageList(){
+    var json = document.getElementById('list').textContent;
+    obj = JSON.parse(json);
+    imageList = $.map(obj, function(el) { return el });
+}
+
+function getPred($imgName){
+    var index = imageList.indexOf($imgName)
+    if(index == 0){
+        return imageList.length - 1
+    }
+    return index-1;
+}
+
+function getNext($imgName){
+    var index = imageList.indexOf($imgName)
+    if(index == imageList.length - 1){
+        return 0
+    }
+    return index+1;
 }
 
 function goTo(path){
