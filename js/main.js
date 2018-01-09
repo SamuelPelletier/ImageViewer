@@ -33,12 +33,21 @@ function viewer(path){
     var name = path.split("/").pop();
     var onlyPath = path.substring(0,path.length - name.length)
     getImageList()
-    $("body").append("<div class='viewer'><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='back'></div><div class='start'></div><div class='pause'></div><div class='next'></div><div class='full-next'></div></div></div></div>")
     $("body").css("overflow","hidden")
+    $("body").append("<div class='viewer' style='display: none'><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='backImage'></div><div class='start'></div><div class='pause'></div><div class='nextImage'></div><div class='full-next'></div></div></div></div>")
+    $(".viewer").fadeIn("slow")
+
+    $(".pause").hide()
 
     $(".cross").click(function(){
-        $("body").css("overflow","visible")
-        $(".viewer").remove()
+        $(".pause").hide()
+        $(".start").show()
+        clearInterval(intervalID); // useless ?
+        intervalID = undefined
+        $(".viewer").fadeOut(function () {
+            $(".viewer").remove()
+            $("body").css("overflow","visible")
+        })
     })
 
     $(".full-back").click(function(){
@@ -47,15 +56,16 @@ function viewer(path){
         name = firstName
     })
 
-    $(".back").click(function(){
+    $(".backImage").click(function(){
         var predName = imageList[getPred(name)]
         $(".imgViewer").attr("src",onlyPath.concat(predName))
         name = predName
     })
 
     $(".start").click(function(){
-        console.log(intervalID)
         if(intervalID == undefined) {
+            $(".start").hide();
+            $(".pause").show()
             intervalID = setInterval(function () {
                 var predName = imageList[getNext(name)]
                 $(".imgViewer").attr("src", onlyPath.concat(predName))
@@ -65,11 +75,13 @@ function viewer(path){
     })
 
     $(".pause").click(function(){
+        $(".pause").hide()
+        $(".start").show()
         clearInterval(intervalID); // useless ?
         intervalID = undefined
     })
 
-    $(".next").click(function(){
+    $(".nextImage").click(function(){
         var nextName = imageList[getNext(name)]
         $(".imgViewer").attr("src",onlyPath.concat(nextName))
         name = nextName
@@ -82,9 +94,11 @@ function viewer(path){
     })
 
     $("img, .control").mouseover(function(){
+        //$(".control").fadeIn("slow")
         $(".control").show()
     })
     $("img, .control").mouseout(function(){
+        //$(".control").fadeOut("slow")
         $(".control").hide()
     })
 }

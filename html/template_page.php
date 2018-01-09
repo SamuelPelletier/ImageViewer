@@ -16,39 +16,39 @@
                 <a href="/">Dashboard</a>
             </li>
             <li>
-                <a href="#">Shortcuts</a>
-            </li>
-            <li>
-                <a href="#">Overview</a>
-            </li>
-            <li>
-                <a href="#">Events</a>
+                <a href="/import">Import</a>
             </li>
             <li>
                 <a href="#">About</a>
-            </li>
-            <li>
-                <a href="#">Services</a>
-            </li>
-            <li>
-                <a href="#">Contact</a>
             </li>
         </ul>
     </div>
     <div id="page-content-wrapper">
         <div class="container-fluid">
-            <h1>Simple Sidebar</h1>
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
-
-            <div class="row text-center text-lg-left">
                 <?php
                 $parts = parse_url($_SERVER['HTTP_REFERER']);
                 parse_str($parts['path'], $path);
                 $path = array_keys($path)[0];
                 if(preg_match('/^\/[0-9]+$/', $path)){
+                    $tabs = scandirByModifiedDate(PATH);
+                    $name = $tabs[sizeof($tabs) - substr($path,1)];
+                    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+                    echo "<h2><a href='".$path."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
                     displayImages(ltrim($path,"/"));
-                }else{
-                    home_page_image();
+                }else if($path == "/import" or $path == "/import/"){
+                    ?><h1>Import</h1><div class="row text-center text-lg-left"><?php
+                    home_page_import();
+                }else if(preg_match('/^\/[a-z]+\/[0-9]+$/', $path)){
+                    $tabs = scandirByModifiedDate(PATH_IMPORT);
+                    $path = str_replace("/import","",$path);
+                    $name = $tabs[sizeof($tabs) - substr($path,1)];
+                    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+                    echo "<h2><a href='".$path."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
+                    displayImagesImport(ltrim($path,"/"));
+                    }else{
+                    ?><h1>Simple Sidebar</h1><div class="row text-center text-lg-left"><?php
+                        home_page();
                 }
                 ?>
 

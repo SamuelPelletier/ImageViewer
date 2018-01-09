@@ -14,6 +14,10 @@ a{
     text-decoration: none !important;
 }
 
+#menu-toggle{
+    margin-bottom: 10px;
+}
+
 .img-thumbnail{
     background-color: transparent;
     border-color: transparent;
@@ -175,38 +179,60 @@ li:last-child .page {
     display: inline-block;
     height: 40px;
     width: 40px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 50%;
+    border: solid 0.1em black;
+    background-color: white;
+}
+
+.control > div:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transform: scale(0.95);
 }
 
 .cross{
-    background-color: red;
+    background-color: white;
+    background-image:url(../assets/cross.png);
+    background-repeat: no-repeat;
+    background-size: contain;
     height: 40px;
     width: 40px;
     position: absolute;
     right: 10px;
     top: 10px;
     z-index: 2;
+    border-radius:50%;
+    border: solid 0.1em black;
  }
+
+.cross:hover{
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transform: scale(0.95);
+    background-color: red;
+}
 
 .full-back{
-     background-color: green;
+    background-image:url(../assets/full-back.png);
+
  }
 
-.back{
-    background-color: pink;
+.backImage{
+    background-image:url(../assets/back.png);
 }
 
 .start{
-    background-color: orange;
+    background-image:url(../assets/play.png);
 }
 
 .pause{
-    background-color: maroon;
+    background-image:url(../assets/pause.png);
 }
 
-.next{
-    background-color: blue;
+.nextImage{
+    background-image:url(../assets/next.png);
 }
 
 .full-next{
-    background-color: yellow;
+    background-image:url(../assets/full-next.png);
 }
