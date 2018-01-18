@@ -136,3 +136,15 @@ function goTo(path){
     $(".container-img > img").remove()
     $(".container-img").prepend("<img src='"+path+"'>")
 }
+
+$(document).on('change', 'input:file', function (event) {
+    var files = event.target.files;
+    var link = files[0].webkitRelativePath.split('/');
+    $('.f-name').html('<p>'+link[0]+'</p>');
+    $('.upload.btn').click(function(){
+        $('.f-name p').addClass('upload');
+        setTimeout(function(){
+            $('.f-name p').addClass('done');
+        },3000);
+    });
+});

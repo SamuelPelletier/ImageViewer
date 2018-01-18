@@ -102,6 +102,25 @@ function home_page_about(){
     echo '<div>hello world!</div>';
 }
 
+function home_page_upload(){
+include '../php/upload.php';
+    echo '<script src="https://use.fontawesome.com/aa95071b26.js" xmlns="http://www.w3.org/1999/html"></script>
+<div id="body">
+  <div class="out-wrap">
+    <p class="head">File Upload</p>
+    <div class="in-wrap">
+   <label for="file" class="ui icon button">Open File</label>
+      <p class="f-name"></p>
+      <form action="../php/upload.php" method="post" enctype="multipart/form-data">
+             <input type="file" webkitdirectory multiple name="file[]" id="file">
+             <input type="hidden" value="john" name="name">
+             <button type="submit" class="upload btn"><i class="fa fa-cloud-upload"></i></button>
+       </form>
+  </div>
+</div>
+</div>';
+}
+
 function scandirByModifiedDate($dir) {
     $ignored = array('.', '..', '.svn', '.htaccess','index.php');
 

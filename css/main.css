@@ -236,3 +236,170 @@ li:last-child .page {
 .full-next{
     background-image:url(../assets/full-next.png);
 }
+
+#body {
+    padding: 50px;
+    height: 100vh;
+    font-family: 'Josefin Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    width: 100%;
+}
+#body button.btn {
+    -webkit-box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    padding: 0;
+    background: #E84A5F;
+    color: #fff;
+    border-radius: 0;
+    text-transform: uppercase;
+    border-radius: 50%;
+    position: absolute;
+    right: 35px;
+    bottom: 35px;
+}
+#body button.btn:focus {
+    outline: none;
+}
+#body button.btn:active {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+    -webkit-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.35) !important;
+}
+#body button.btn i {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    line-height: 50px;
+}
+#body button.btn i:before {
+    font-size: 25px;
+}
+#body, #body * {
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+#body .out-wrap {
+    position: relative;
+    padding: 0 50px 50px;
+    -webkit-box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    width: 50%;
+    margin: 50px auto;
+    background: #fff;
+}
+#body .out-wrap .head {
+    background: #E84A5F;
+    margin: 0 -50px 50px;
+    font-size: 20px;
+    color: #fff;
+    text-align: center;
+    line-height: 50px;
+}
+#body .out-wrap .in-wrap {
+    margin: auto;
+    border: dashed 3px #ddd;
+    border-radius: 10px;
+    text-align: center;
+    padding: 30px;
+}
+#body .out-wrap .in-wrap label {
+    padding: 10px 25px;
+    background: #E84A5F;
+    color: #fff;
+    -webkit-box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    -webkit-transition: all .15s;
+    transition: all .15s;
+}
+#body .out-wrap .in-wrap label:active {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+    -webkit-box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.35) !important;
+    box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.35) !important;
+}
+#body .out-wrap .in-wrap p.f-name {
+    margin: 0;
+}
+#body .out-wrap .in-wrap p.f-name > p {
+    font-size: 13px;
+    margin: 20px 0 0;
+    text-transform: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-transition: all .3s, -webkit-transform .3s .1s;
+    transition: all .3s, -webkit-transform .3s .1s;
+    transition: all .3s, transform .3s .1s;
+    transition: all .3s, transform .3s .1s, -webkit-transform .3s .1s;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    line-height: 1.5;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+#body .out-wrap .in-wrap p.f-name > p span {
+    max-width: 70%;
+    padding-left: 15px;
+    margin-left: 15px;
+    border-left: dotted 1px #999;
+}
+#body .out-wrap .in-wrap p.f-name > p i:before {
+    font-size: 50px;
+    display: inline-block;
+    margin: 0 15px 0 0;
+}
+#body .out-wrap .in-wrap p.f-name > p.upload {
+    border: solid 3px transparent;
+    height: 10px;
+    overflow: hidden;
+    background: #1db33a;
+    margin: 20px auto 0;
+    -webkit-animation: progress 3s;
+    animation: progress 3s;
+}
+@-webkit-keyframes progress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+@keyframes progress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%;
+    }
+}
+#body .out-wrap .in-wrap p.f-name > p.upload > * {
+    opacity: 0;
+}
+#body .out-wrap .in-wrap p.f-name > p.upload.done {
+    width: 30px;
+    height: 15px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    background: transparent;
+    border-color: transparent transparent #1db33a #1db33a;
+}
+#body .out-wrap .in-wrap input[type="file"] {
+    display: none;
+}
+
+@media only screen and (max-width: 767px) {
+    #body {
+        padding: 15px 0;
+    }
+
+    .out-wrap {
+        width: 90% !important;
+    }
+}
