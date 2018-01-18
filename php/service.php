@@ -6,9 +6,9 @@
  * Time: 21:33
  */
 
-const PATH = "../Photo/";
+const PATH = "../media/autre/";
 const PATH_IMPORT = "../Import/";
-const PAGINATION = 22;
+const PAGINATION = 20;
 
 function home_page()
 {
@@ -20,7 +20,6 @@ function home_page()
         $page = $query["page"];
     }
     echo '<script>createPagination('.PAGINATION.','.sizeof($tabs).','.$page.')</script>';
-    //var_dump($page);
     $tabs = array_slice($tabs, ($page-1)*PAGINATION);
     $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
     for ($i = 0; $i < $size; $i++) {
@@ -28,10 +27,10 @@ function home_page()
                 echo "\n";
             }
             $firstImage = array_values(array_diff(scandir(PATH."/".$tabs[$i]), array(".","..")))[0];
-            $lien = sizeof($tabs) - $i+($page-1)*22;
+            $lien = sizeof($tabs)-$i;
             echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="/'. $lien.'" class="d-block mb-4 h-100 img-cell">
+                    <a href="./?number='.$lien.'" class="d-block mb-4 h-100 img-cell">
                         <h5 class="img-name" title="'.$tabs[$i].'">' . $tabs[$i] . '</h5>
                         <img class="img-fluid img-thumbnail" src="'.PATH . $tabs[$i] ."/".$firstImage. '" alt="">
                     </a>

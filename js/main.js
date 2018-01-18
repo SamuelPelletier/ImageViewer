@@ -5,7 +5,14 @@
 var imageList;
 
 $(document).ready(function () {
-    $.get("../html/template_page.php", function (data) {
+    var url;
+    var websiteURL = document.URL;
+    if(websiteURL.includes("import")){
+	url = "../html/template_page.php";
+    }else{
+	url = "html/template_page.php";
+    }
+    $.get(url, function (data) {
         $("body").append(data);
     });
 })

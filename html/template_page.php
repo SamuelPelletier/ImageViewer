@@ -16,7 +16,7 @@
                 <a href="/">Dashboard</a>
             </li>
             <li>
-                <a href="/import">Import</a>
+                <a href="./import">Import</a>
             </li>
             <li>
                 <a href="#">About</a>
@@ -28,14 +28,15 @@
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
                 <?php
                 $parts = parse_url($_SERVER['HTTP_REFERER']);
-                parse_str($parts['path'], $path);
-                $path = array_keys($path)[0];
-                if(preg_match('/^\/[0-9]+$/', $path)){
+                //parse_str($parts['path'], $path);
+		parse_str($parts['query'], $path);
+                //$path = array_keys($path)[0];
+                if(isset($path['number']) && preg_match('/^[0-9]+$/', $path['number'])){
                     $tabs = scandirByModifiedDate(PATH);
-                    $name = $tabs[sizeof($tabs) - substr($path,1)];
+                    $name = $tabs[sizeof($tabs) - $path['number']];
                     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-                    echo "<h2><a href='".$path."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
-                    displayImages(ltrim($path,"/"));
+                    echo "<h2><a href='".PATH."/".$name."/' download='".$name."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
+                    displayImages(ltrim($path['number'],"/"));
                 }else if($path == "/import" or $path == "/import/"){
                     ?><h1>Import</h1><div class="row text-center text-lg-left"><?php
                     home_page_import();
