@@ -192,24 +192,44 @@ li:last-child .page {
 }
 
 .cross{
-    background-color: white;
-    background-image:url(../assets/cross.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: 40px;
-    width: 40px;
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    z-index: 2;
-    border-radius:50%;
-    border: solid 0.1em black;
- }
+      background-color: white;
+      background-image:url(../assets/cross.png);
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 40px;
+      width: 40px;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 2;
+      border-radius:50%;
+      border: solid 0.1em black;
+  }
 
 .cross:hover{
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     transform: scale(0.95);
     background-color: red;
+}
+
+.fullscreen{
+    background-color: white;
+    background-image:url(../assets/fullscreen.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 40px;
+    width: 40px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 2;
+    border-radius:50%;
+    border: solid 0.1em black;
+}
+
+.fullscreen:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transform: scale(0.95);
 }
 
 .full-back{

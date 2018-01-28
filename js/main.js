@@ -36,12 +36,13 @@ function createPagination(pagination, nbrItems, page) {
 }
 
 function viewer(path){
+    toggleFullscreen()
     var intervalID;
     var name = path.split("/").pop();
     var onlyPath = path.substring(0,path.length - name.length)
     getImageList()
     $("body").css("overflow","hidden")
-    $("body").append("<div class='viewer' style='display: none'><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='backImage'></div><div class='start'></div><div class='pause'></div><div class='nextImage'></div><div class='full-next'></div></div></div></div>")
+    $("body").append("<div class='viewer' style='display: none'><div class='fullscreen'></div><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='backImage'></div><div class='start'></div><div class='pause'></div><div class='nextImage'></div><div class='full-next'></div></div></div></div>")
     $(".viewer").fadeIn("slow")
 
     $(".pause").hide()
@@ -55,6 +56,19 @@ function viewer(path){
             $(".viewer").remove()
             $("body").css("overflow","visible")
         })
+    })
+
+    $(".fullscreen").click(function(){
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) {
+            docElm.requestFullscreen();
+        }
+        else if (docElm.mozRequestFullScreen) {
+            docElm.mozRequestFullScreen();
+        }
+        else if (docElm.webkitRequestFullScreen) {
+            docElm.webkitRequestFullScreen();
+        }
     })
 
     $(".full-back").click(function(){
@@ -100,14 +114,58 @@ function viewer(path){
         name = lastName
     })
 
-    $("img, .control").mouseover(function(){
-        //$(".control").fadeIn("slow")
-        $(".control").show()
+    var ready = true;
+    
+    $("img").mouseover(function(e){
+        if(ready == true) {
+            ready = false
+            $(".control").fadeIn("slow", function () {
+                ready = true
+            })
+        }
     })
-    $("img, .control").mouseout(function(){
-        //$(".control").fadeOut("slow")
-        $(".control").hide()
+
+    $("img").mouseout(function(e){
+        if (e.relatedTarget && !["control", "start", "pause", "back", "next", "full-back", "full-next"].includes(e.relatedTarget.className)) {
+            if(ready == true) {
+                ready = false
+                $(".control").fadeOut("slow", function () {
+                    ready = true
+                })
+            }
+        }
     })
+
+    $(document).keydown(function (e) {
+        switch (e.keyCode){
+            case 39:
+                var nextName = imageList[getNext(name)]
+                $(".imgViewer").attr("src",onlyPath.concat(nextName))
+                name = nextName
+                break
+            case 37:
+                var predName = imageList[getPred(name)]
+                $(".imgViewer").attr("src",onlyPath.concat(predName))
+                name = predName
+                break
+            case 32:
+                if(intervalID == undefined) {
+                    $(".start").hide();
+                    $(".pause").show()
+                    intervalID = setInterval(function () {
+                        var predName = imageList[getNext(name)]
+                        $(".imgViewer").attr("src", onlyPath.concat(predName))
+                        name = predName
+                    }, 3500);
+                }else{
+                    $(".pause").hide()
+                    $(".start").show()
+                    clearInterval(intervalID); // useless ?
+                    intervalID = undefined
+                }
+                break
+        }
+    });
 }
 
 function getImageList(){
@@ -148,3 +206,29 @@ $(document).on('change', 'input:file', function (event) {
         },3000);
     });
 });
+
+function toggleFullscreen(){
+    document.addEventListener("fullscreenchange", function () {
+        if(document.fullscreen){
+            $(".fullscreen").hide()
+        }else{
+            $(".fullscreen").show()
+        }
+    }, false);
+
+    document.addEventListener("mozfullscreenchange", function () {
+        if(document.mozFullScreen){
+            $(".fullscreen").hide()
+        }else{
+            $(".fullscreen").show()
+        }
+    }, false);
+
+    document.addEventListener("webkitfullscreenchange", function () {
+        if(document.webkitIsFullScreen){
+            $(".fullscreen").hide()
+        }else{
+            $(".fullscreen").show()
+        }
+    }, false);
+}

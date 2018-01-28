@@ -34,11 +34,15 @@
                 //parse_str($parts['path'], $path);
 		        parse_str($parts['query'], $path);
                 //$path = array_keys($path)[0];
+                $link = PATH;
+                if($path['safe'] == "false"){
+                    $link =  PATH_NS;
+                }
                 if($parts['path'] == '/' && $path['number'] != null){
-                    $tabs = scandirByModifiedDate(PATH);
+                    $tabs = scandirByModifiedDate($link);
                     $name = $tabs[sizeof($tabs) - $path['number']];
                     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-                    echo "<h2><a href='".PATH."/".$name."/' download='".$name."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
+                    echo "<h2><a href='".$link."/".$name."/' download='".$name."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
                     displayImages(ltrim($path['number'],"/"));
                 }else if($parts['path'] == '/import/' && $path['number'] != null){
                     $tabs = scandirByModifiedDate(PATH_IMPORT);

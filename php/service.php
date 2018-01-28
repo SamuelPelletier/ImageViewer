@@ -7,13 +7,25 @@
  */
 
 const PATH = "../media/autre/";
+const PATH_NS =  "../media/nosafe/";
 const PATH_IMPORT = "../Import/";
 const PAGINATION = 20;
 const TITLE = "ImageViewer";
 
+function check_link(){
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $path);
+    $link = PATH;
+    if($path['safe'] == "false"){
+        $link =  PATH_NS;
+    }
+    return $link;
+}
+
 function home_page()
 {
-    $tabs = scandirByModifiedDate(PATH);
+    $link = check_link();
+    $tabs = scandirByModifiedDate($link);
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     $page = 1;
     if (array_key_exists('query', $parts)) {
@@ -27,21 +39,22 @@ function home_page()
             if ($i % 4 == 0) {
                 echo "\n";
             }
-            $firstImage = array_values(array_diff(scandir(PATH."/".$tabs[$i]), array(".","..")))[0];
+            $firstImage = array_values(array_diff(scandir($link."/".$tabs[$i]), array(".","..")))[0];
             $lien = sizeof($tabs)-$i;
             echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="./?number='.$lien.'" class="d-block mb-4 h-100 img-cell">
                         <h5 class="img-name" title="'.$tabs[$i].'">' . $tabs[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="'.PATH . $tabs[$i] ."/".$firstImage. '" alt="">
+                        <img class="img-fluid img-thumbnail" src="'.$link . $tabs[$i] ."/".$firstImage. '" alt="">
                     </a>
                 </div>';
     }
 }
 
 function displayImages($path){
-    $tabs = scandirByModifiedDate(PATH);
-    $path = PATH .$tabs[sizeof($tabs) - $path];
+    $link = check_link();
+    $tabs = scandirByModifiedDate($link);
+    $path = $link .$tabs[sizeof($tabs) - $path];
     $tabs = array_diff(scandir($path),array(".",".."));
     for ($i = 2; $i < sizeof($tabs)+2; $i++) {
         echo '
