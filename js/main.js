@@ -7,7 +7,7 @@ var imageList;
 $(document).ready(function () {
     var url;
     var websiteURL = document.URL;
-    if(websiteURL.includes("import")){
+    if(websiteURL.includes("import") || websiteURL.includes("about") || websiteURL.includes("upload")){
 	url = "../html/template_page.php";
     }else{
 	url = "html/template_page.php";
@@ -19,6 +19,12 @@ $(document).ready(function () {
 
 function createPagination(pagination, nbrItems, page) {
 
+    var url = new URL(document.URL);
+    var safe = url.searchParams.get('safe');
+    var safeUrl = "";
+    if(safe == 'false'){
+        safeUrl = "&safe=false"
+    }
     var nbrPage = Math.trunc(nbrItems / pagination)
     if (nbrItems % pagination > 0) {
         nbrPage++
@@ -27,12 +33,12 @@ function createPagination(pagination, nbrItems, page) {
     var pageNext = (page + 1 > nbrPage) ? nbrPage : page + 1
 
     $('.container-fluid').append('<ul style="margin-left: calc(50% - 34px * ' + (nbrPage + 2) + '/2)" class="pagination"></ul>')
-    $('.pagination').append('<li><a href="?page=' + pagePrev + '" class="prev">&laquo</a></li>')
+    $('.pagination').append('<li><a href="?page=' + pagePrev + safeUrl+'" class="prev">&laquo</a></li>')
     for (i = 1; i <= nbrPage; i++) {
         var active = (page == i ) ? 'active' : ''
-        $('.pagination').append('<li><a class="page ' + active + '" href="?page=' + i + '">' + i + '</a></li>')
+        $('.pagination').append('<li><a class="page ' + active + '" href="?page=' + i + safeUrl+'">' + i + '</a></li>')
     }
-    $('.pagination').append('  <li><a href="?page=' + pageNext + '" class="next">&raquo;</a></li>')
+    $('.pagination').append('  <li><a href="?page=' + pageNext + safeUrl+'" class="next">&raquo;</a></li>')
 }
 
 function viewer(path){
@@ -42,7 +48,7 @@ function viewer(path){
     var onlyPath = path.substring(0,path.length - name.length)
     getImageList()
     $("body").css("overflow","hidden")
-    $("body").append("<div class='viewer' style='display: none'><div class='fullscreen'></div><div class='cross'></div><div class='container-img'><img  class='imgViewer' src='"+path+"'><div class='control'><div class='full-back'></div><div class='backImage'></div><div class='start'></div><div class='pause'></div><div class='nextImage'></div><div class='full-next'></div></div></div></div>")
+    $("body").append("<div class='viewer' style='display: none'><div class='fullscreen'></div><div class='cross'></div><div class='container-img'><img  class='imgViewer' src=\""+path+"\"><div class='control'><div class='full-back'></div><div class='backImage'></div><div class='start'></div><div class='pause'></div><div class='nextImage'></div><div class='full-next'></div></div></div></div>")
     $(".viewer").fadeIn("slow")
 
     $(".pause").hide()
@@ -197,8 +203,9 @@ function goTo(path){
 
 $(document).on('change', 'input:file', function (event) {
     var files = event.target.files;
-    var link = files[0].webkitRelativePath.split('/');
-    $('.f-name').html('<p>'+link[0]+'</p>');
+    var link = files[0].name;
+    $('.f-name').html('<p>'+link+'</p>');
+    $('#name').val(link);
     $('.upload.btn').click(function(){
         $('.f-name p').addClass('upload');
         setTimeout(function(){

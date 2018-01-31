@@ -8,9 +8,9 @@
 
 const PATH = "../media/autre/";
 const PATH_NS =  "../media/nosafe/";
-const PATH_IMPORT = "../Import/";
+const PATH_IMPORT = "../import/";
 const PAGINATION = 20;
-const TITLE = "ImageViewer";
+const TITLE = "MyWebSite";
 
 function check_link(){
     $parts = parse_url($_SERVER['HTTP_REFERER']);
@@ -25,6 +25,10 @@ function check_link(){
 function home_page()
 {
     $link = check_link();
+    $safe = "";
+    if($link == PATH_NS){
+        $safe = "&safe=false";
+    }
     $tabs = scandirByModifiedDate($link);
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     $page = 1;
@@ -43,7 +47,7 @@ function home_page()
             $lien = sizeof($tabs)-$i;
             echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="./?number='.$lien.'" class="d-block mb-4 h-100 img-cell">
+                    <a href="./?number='.$lien.$safe.'" class="d-block mb-4 h-100 img-cell">
                         <h5 class="img-name" title="'.$tabs[$i].'">' . $tabs[$i] . '</h5>
                         <img class="img-fluid img-thumbnail" src="'.$link . $tabs[$i] ."/".$firstImage. '" alt="">
                     </a>
@@ -57,9 +61,12 @@ function displayImages($path){
     $path = $link .$tabs[sizeof($tabs) - $path];
     $tabs = array_diff(scandir($path),array(".",".."));
     for ($i = 2; $i < sizeof($tabs)+2; $i++) {
+        $src = $path.'/'.$tabs[$i];
+        $src = str_replace("'","\'", $src);
+        $src = "'".$src."'";
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(\''.$path.'/'.$tabs[$i].'\')">
+                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer('.$src.')">
                         <img class="img-fluid img-thumbnail" src="'.$path .'/' .$tabs[$i] . '" alt="">
                     </a>
                 </div>';
@@ -122,13 +129,13 @@ include '../php/upload.php';
   <div class="out-wrap">
     <p class="head">File Upload</p>
     <div class="in-wrap">
-   <label for="file" class="ui icon button">Open File</label>
-      <p class="f-name"></p>
-      <form action="../php/upload.php" method="post" enctype="multipart/form-data">
-             <input type="file" webkitdirectory multiple name="file[]" id="file">
-             <input type="hidden" value="john" name="name">
-             <button type="submit" class="upload btn"><i class="fa fa-cloud-upload"></i></button>
-       </form>
+       <label for="file" class="ui icon button">Open File</label>
+          <p class="f-name"></p>
+          <form action="../php/upload.php" method="post" enctype="multipart/form-data">
+                 <input type="file"  accept="application/zip" requied name="file" id="file">
+                 <input type="hidden" value="" name="name" id="name">
+                 <button type="submit" class="upload btn"><i class="fa fa-cloud-upload"></i></button>
+           </form>
   </div>
 </div>
 </div>';

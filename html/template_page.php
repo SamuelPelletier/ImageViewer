@@ -16,13 +16,13 @@
                 <a href="/">Dashboard</a>
             </li>
             <li>
-                <a href="./import">Import</a>
+                <a href="/import">Import</a>
             </li>
             <li>
-                <a href="./upload">Upload</a>
+                <a href="/upload">Upload</a>
             </li>
             <li>
-                <a href="./about">About</a>
+                <a href="/about">About</a>
             </li>
         </ul>
     </div>
@@ -58,10 +58,10 @@
                     home_page_about();
                 }else if($parts['path'] == "/upload" or $parts['path'] == "/upload/"){
                     ?><h1>Upload</h1><div class="row text-center text-lg-left"><?php
-                        home_page_upload();
+                    home_page_upload();
                 }else{
-                    ?><h1>Simple Sidebar</h1><div class="row text-center text-lg-left"><?php
-                        home_page();
+                    ?><div class="row text-center text-lg-left"><?php
+                    home_page();
                 }
                 ?>
 
