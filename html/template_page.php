@@ -13,7 +13,10 @@
                 </a>
             </li>
             <li>
-                <a href="/">Dashboard</a>
+                <a href="/">Best</a>
+            </li>
+            <li>
+                <a href="/all">All</a>
             </li>
             <li>
                 <a href="/import">Import</a>
@@ -50,9 +53,18 @@
                     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
                     echo "<h2><a href='".$path."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
                     displayImagesImport(ltrim( $path['number'],"/"));
+                }else if($parts['path'] == '/all/' && $path['number'] != null){
+                    $tabs = scandirByModifiedDate(PATH_ALL);
+                    $name = $tabs[sizeof($tabs) - $path['number']];
+                    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+                    echo "<h2><a href='".$link."/".$name."/' download='".$name."'>Download</a></h2><div class=\"row text-center text-lg-left\">";
+                    displayImagesAll(ltrim($path['number'],"/"));
                 }else if($parts['path'] == "/import" or $parts['path'] == "/import/"){
                     ?><h1>Import</h1><div class="row text-center text-lg-left"><?php
                     home_page_import();
+                }else if($parts['path'] == "/all" or $parts['path'] == "/all/"){
+                ?><h1>All</h1><div class="row text-center text-lg-left"><?php
+                    home_page_all();
                 }else if($parts['path'] == "/about" or $parts['path'] == "/about/"){
                     ?><h1>About</h1><div class="row text-center text-lg-left"><?php
                     home_page_about();
