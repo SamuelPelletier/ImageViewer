@@ -262,3 +262,16 @@ function toggleFullscreen() {
         }
     }, false);
 }
+
+function downloadFile(name){
+    $.ajax({
+        type: "GET",
+        url: "/php/download.php" ,
+        data: { name: name },
+        success: function(data){
+            console.log(data);
+        }, error: function(err) {
+            console.log(err);
+        }
+    });
+}

@@ -423,3 +423,88 @@ li:last-child .page {
         width: 90% !important;
     }
 }
+
+
+
+
+
+.download {
+    color: #007bff;
+    position: relative;
+    margin: 10px 7px;
+    padding: 5px 70px;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 2px;
+    border: 3px solid #007bff;
+    border-radius: 4px;
+    text-transform: uppercase;
+    outline: 0;
+    overflow:hidden;
+    background: none;
+    z-index: 1;
+    cursor: pointer;
+    transition:         0.08s ease-in;
+    -o-transition:      0.08s ease-in;
+    -ms-transition:     0.08s ease-in;
+    -moz-transition:    0.08s ease-in;
+    -webkit-transition: 0.08s ease-in;
+}
+
+
+
+.download:after{
+    top:8px;
+    color: #007bff;
+    content:"Download";
+    position:absolute;
+    width:100%;
+    height:100%;
+    left:0;
+    text-align:center;
+    -webkit-transition: all 400ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.download:before {
+    top:8px;
+    color: #007bff;
+    content:"Go! →";
+    height:100%;
+    width:100%;
+    position:absolute;
+    left:-100%;
+    opacity: 0;
+    -webkit-transition: all 500ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.download:hover{
+    background:#383736;
+}
+
+.download:hover:before{
+    left:0;
+    opacity:1;
+    color:#007bff;
+}
+.download:hover:after{
+    left:100%;
+    opacity:0;
+}
+
+.download.left:hover{
+    background:none;
+}
+
+.download.left:before {
+    left:100%;
+    color:#007bff;
+    -webkit-transition: all 425ms cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.download.left:hover:before{
+    left:0;
+}
+
+.row, .text-center, .text-lg-left{
+    margin-top: 15px;
+}
