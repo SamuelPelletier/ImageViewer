@@ -3,6 +3,21 @@
  */
 
 var imageList;
+var flagLoad = false;
+
+$( window ).on( "load", function() {
+    var historyTraversal = event.persisted || ( typeof window.performance != "undefined" && window.performance.navigation.type === 2 );
+  if ( historyTraversal ) {
+    // Handle page restore.
+    window.location.reload();
+  }
+    setTimeout(function(){
+        if(flagLoad == false){
+            $("body").append('<div class="loader"><div class="loader-inner"><div class="loader-line-wrap"><div class="loader-line"></div></div><div class="loader-line-wrap"><div class="loader-line"></div></div><div class="loader-line-wrap"><div class="loader-line"></div></div><div class="loader-line-wrap"><div class="loader-line"></div></div><div class="loader-line-wrap"><div class="loader-line"></div></div></div></div>');
+        }
+    }, 100); //wait 20 ms
+});
+
 
 $(document).ready(function () {
     var url;
@@ -16,7 +31,9 @@ $(document).ready(function () {
     }
 
     $.get(url, function (data) {
+        $(".loader").fadeOut("slow");
         $("body").append(data);
+        flagLoad = true;
     });
 })
 
@@ -261,17 +278,4 @@ function toggleFullscreen() {
             $(".fullscreen").show()
         }
     }, false);
-}
-
-function downloadFile(name){
-    $.ajax({
-        type: "GET",
-        url: "/php/download.php" ,
-        data: { name: name },
-        success: function(data){
-            console.log(data);
-        }, error: function(err) {
-            console.log(err);
-        }
-    });
 }

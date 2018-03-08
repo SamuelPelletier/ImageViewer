@@ -28,7 +28,7 @@ function check_link()
 }
 
 function check_page(){
-
+    $page = 1;
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     if (array_key_exists('query', $parts)) {
         parse_str($parts['query'], $query);
@@ -75,7 +75,6 @@ function home_page_all()
     echo "<h1>All</h1><div class=\"row text-center text-lg-left\">";
     $tabs = scandirByModifiedDate(PATH_ALL);
     $page = check_page();
-
     echo '<script>createPagination(' . PAGINATION . ',' . sizeof($tabs) . ',' . $page . ')</script>';
     $tabs = array_slice($tabs, ($page - 1) * PAGINATION);
     $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
@@ -166,8 +165,8 @@ function displayImages($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'" . $name . "'";
-    echo '<h2><a class="download" onclick="downloadFile('.$name.')"></a></h2><div class="row text-center text-lg-left">';
+    $name = "'/php/download.php?name=" . $name . "&path=".$link."'";
+    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
         $src = $path . '/' . $tabs[$i];
@@ -193,7 +192,8 @@ function displayImagesAll($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    echo "<h2><a class='download' href='".PATH_ALL."/".$name."/' download='".$name."'></a></h2><div class=\"row text-center text-lg-left\">";
+    $name = "'/php/download.php?name=" . $name . "&path=".PATH_ALL."'";
+    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
         $src = $path . '/' . $tabs[$i];
@@ -219,7 +219,8 @@ function displayImagesImport($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    echo "<h2><a class='download' href='".PATH_IMPORT."/".$name."/' download='".$name."'></a></h2><div class=\"row text-center text-lg-left\">";
+    $name = "'/php/download.php?name=" . $name . "&path=".PATH_IMPORT."'";
+    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
@@ -247,13 +248,8 @@ function scandirByModifiedDate($dir)
     $page--;
     $files = array();
     foreach (scandir($dir) as $key => $file) {
-        if($key >= ($page*PAGINATION-PAGINATION*10) && $key <= ($page*PAGINATION+PAGINATION*10)) {
-            if (in_array($file, $ignored)) continue;
-            $files[$file] = filemtime($dir . '/' . $file);
-        }
-        if($key > ($page*PAGINATION+PAGINATION*10)){
-            break;
-        }
+        if (in_array($file, $ignored)) continue;
+        $files[$file] = filemtime($dir . '/' . $file);
     }
 
     arsort($files);
