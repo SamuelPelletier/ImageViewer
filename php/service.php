@@ -43,27 +43,36 @@ function check_page(){
 function home_page()
 {
     echo "<h1>Best</h1><div class=\"row text-center text-lg-left\">";
+    echo '<input type="text" name="search" id="search"><button class="searchButton" onclick="search()">Search</button>';
     $link = check_link();
     $page = check_page();
     $safe = "";
     if ($link == PATH_NS) {
         $safe = "&safe=false";
     }
-    $tabs = scandirByModifiedDate($link);
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($tabs) . ',' . $page . ')</script>';
-    $tabs = array_slice($tabs, ($page - 1) * PAGINATION);
-    $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
+    
+    $allFolders = scandirByModifiedDate($link);
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $path);
+    if( isset($path['search']) &&  $path['search'] != null){
+        $searchFolders = searchByName($link,$allFolders,$path['search']);
+    }else{
+        $searchFolders = $allFolders;
+    }
+    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
     for ($i = 0; $i < $size; $i++) {
         if ($i % 4 == 0) {
             echo "\n";
         }
-        $firstImage = array_values(array_diff(scandir($link . "/" . $tabs[$i]), array(".", "..")))[0];
-        $lien = sizeof($tabs) - $i;
+        $firstImage = array_values(array_diff(scandir($link . "/" . $searchFolders[$i]), array(".", "..")))[0];
+        $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="./?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $tabs[$i] . '">' . $tabs[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . $link . $tabs[$i] . "/" . $firstImage . '" alt="">
+                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                        <img class="img-fluid img-thumbnail" src="' . $link . $searchFolders[$i] . "/" . $firstImage . '" alt="">
                     </a>
                 </div>';
     }
@@ -73,7 +82,7 @@ function home_page()
 function home_page_all()
 {
     echo "<h1>All</h1><div class=\"row text-center text-lg-left\">";
-    $tabs = scandirByModifiedDate(PATH_ALL);
+    $tabs = searchByName(PATH_ALL,'prem');
     $page = check_page();
     echo '<script>createPagination(' . PAGINATION . ',' . sizeof($tabs) . ',' . $page . ')</script>';
     $tabs = array_slice($tabs, ($page - 1) * PAGINATION);
@@ -256,4 +265,15 @@ function scandirByModifiedDate($dir)
     $files = array_keys($files);
 
     return ($files) ? $files : false;
+}
+
+function searchByName($path, $allFolders, $name){
+    $result = array();
+    foreach($allFolders as $key => $data){
+        if(preg_match('/.*'.strtoupper($name).'.*/',strtoupper($data))){
+            array_push($result, $data);
+        }
+    }
+    return $result;
+
 }

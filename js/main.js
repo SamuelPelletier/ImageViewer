@@ -35,7 +35,20 @@ $(document).ready(function () {
         $("body").append(data);
         flagLoad = true;
     });
+
 })
+
+function search(){
+    var newUrl = 'search='+$("#search").val();
+    if($_GET('search') != null){
+        console.log(document.location)
+    }else if(Object.keys($_GET()).length > 0){
+        newUrl = '&'+newUrl
+    }else{
+        newUrl = '?'+newUrl
+    }
+   //window.location.href = document.URL+newUrl;
+}
 
 function createPagination(pagination, nbrItems, page) {
 
@@ -133,9 +146,12 @@ function viewer(path) {
             $(".pause").show()
             intervalID = setInterval(function () {
                 var predName = imageList[getNext(name)]
-                $(".imgViewer").attr("src", onlyPath.concat(predName))
+                $(".imgViewer").fadeTo(1000,0.1);
+                intervalID = setTimeout(function () {
+                    $(".imgViewer").attr("src", onlyPath.concat(predName)).fadeTo(1000,1)
+                }, 1000);
                 name = predName
-            }, 3500);
+            }, 5000);
         }
     })
 
@@ -161,6 +177,15 @@ function viewer(path) {
     var ready = true;
 
     $("img").mouseover(function (e) {
+        if (ready == true) {
+            ready = false
+            $(".control").fadeIn("slow", function () {
+                ready = true
+            })
+        }
+    })
+
+    $("img").mousemove(function (e) {
         if (ready == true) {
             ready = false
             $(".control").fadeIn("slow", function () {
@@ -278,4 +303,19 @@ function toggleFullscreen() {
             $(".fullscreen").show()
         }
     }, false);
+}
+
+function $_GET(param) {
+	var vars = {};
+	window.location.href.replace( location.hash, '' ).replace( 
+		/[?&]+([^=&]+)=?([^&]*)?/gi, // regexp
+		function( m, key, value ) { // callback
+			vars[key] = value !== undefined ? value : '';
+		}
+	);
+
+	if ( param ) {
+		return vars[param] ? vars[param] : null;	
+	}
+	return vars;
 }
