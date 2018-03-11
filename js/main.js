@@ -33,21 +33,33 @@ $(document).ready(function () {
     $.get(url, function (data) {
         $(".loader").fadeOut("slow");
         $("body").append(data);
+        $("#search").val($_GET()['search'])
+        $('#search').keypress(function(e) {
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                search()
+            }
+        });
         flagLoad = true;
     });
 
 })
 
 function search(){
-    var newUrl = 'search='+$("#search").val();
-    if($_GET('search') != null){
-        console.log(document.location)
-    }else if(Object.keys($_GET()).length > 0){
-        newUrl = '&'+newUrl
-    }else{
-        newUrl = '?'+newUrl
+    var param = $_GET();
+    if('number' in param){
+        delete param['number'];
     }
-   //window.location.href = document.URL+newUrl;
+    if('search' in param || Object.keys(param).length > 0){
+        if(param['page'] > 1){
+            param['page'] = 1
+        }
+        param['search'] = $("#search").val();
+        newUrl = window.location.origin + window.location.pathname + '?' + Object.keys(param).map(key => key + '=' + param[key]).join('&')
+    }else{
+        newUrl = document.URL+'?'+'search='+$("#search").val()
+    }
+    window.location = newUrl;
 }
 
 function createPagination(pagination, nbrItems, page) {
@@ -55,7 +67,9 @@ function createPagination(pagination, nbrItems, page) {
     var url = new URL(document.URL);
     var safe = url.searchParams.get('safe');
     var page = url.searchParams.get('page') != null ? parseInt(url.searchParams.get('page')) : 1;
-    var safeUrl = "";
+    var param = $_GET();
+    delete param['page'];
+    var safeUrl =  '&'+Object.keys(param).map(key => key + '=' + param[key]).join('&');
     if (safe == 'false') {
         safeUrl = "&safe=false"
     }

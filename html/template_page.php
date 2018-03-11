@@ -32,6 +32,7 @@
     <div id="page-content-wrapper">
         <div class="container-fluid">
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
+            <input type="text" name="search" id="search"><button class="searchButton" onclick="search()">Search</button>
                 <?php
                 $parts = parse_url($_SERVER['HTTP_REFERER']);
 		        parse_str($parts['query'], $path);

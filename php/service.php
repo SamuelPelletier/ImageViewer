@@ -43,7 +43,6 @@ function check_page(){
 function home_page()
 {
     echo "<h1>Best</h1><div class=\"row text-center text-lg-left\">";
-    echo '<input type="text" name="search" id="search"><button class="searchButton" onclick="search()">Search</button>';
     $link = check_link();
     $page = check_page();
     $safe = "";
@@ -82,22 +81,29 @@ function home_page()
 function home_page_all()
 {
     echo "<h1>All</h1><div class=\"row text-center text-lg-left\">";
-    $tabs = searchByName(PATH_ALL,'prem');
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $path);
+    $allFolders = scandirByModifiedDate(PATH_ALL);
+    if( isset($path['search']) &&  $path['search'] != null){
+        $searchFolders = searchByName(PATH_ALL,$allFolders,$path['search']);
+    }else{
+        $searchFolders = $allFolders;
+    }
     $page = check_page();
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($tabs) . ',' . $page . ')</script>';
-    $tabs = array_slice($tabs, ($page - 1) * PAGINATION);
-    $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
+    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
     for ($i = 0; $i < $size; $i++) {
         if ($i % 4 == 0) {
             echo "\n";
         }
-        $firstImage = array_values(array_diff(scandir(PATH_ALL . "/" . $tabs[$i]), array(".", "..")))[0];
-        $lien = sizeof($tabs) - $i;
+        $firstImage = array_values(array_diff(scandir(PATH_ALL . "/" . $searchFolders[$i]), array(".", "..")))[0];
+        $lien = sizeof($searchFolders) - $i;
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="/all/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $tabs[$i] . '">' . $tabs[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . PATH_ALL . $tabs[$i] . "/" . $firstImage . '" alt="">
+                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                        <img class="img-fluid img-thumbnail" src="' . PATH_ALL . $searchFolders[$i] . "/" . $firstImage . '" alt="">
                     </a>
                 </div>';
     }
@@ -108,23 +114,30 @@ function home_page_import()
 {
     echo "<h1>Import</h1><div class=\"row text-center text-lg-left\">";
 
-    $tabs = scandirByModifiedDate(PATH_IMPORT);
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $path);
+    $allFolders = scandirByModifiedDate(PATH_IMPORT);
+    if( isset($path['search']) &&  $path['search'] != null){
+        $searchFolders = searchByName(PATH_IMPORT,$allFolders,$path['search']);
+    }else{
+        $searchFolders = $allFolders;
+    }
     $page = check_page();
 
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($tabs) . ',' . $page . ')</script>';
-    $tabs = array_slice($tabs, ($page - 1) * PAGINATION);
-    $size = sizeof($tabs) < PAGINATION ? sizeof($tabs) : PAGINATION;
+    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
     for ($i = 0; $i < $size; $i++) {
         if ($i % 4 == 0) {
             echo "\n";
         }
-        $firstImage = array_values(array_diff(scandir(PATH_IMPORT . "/" . $tabs[$i]), array(".", "..")))[0];
-        $lien = sizeof($tabs) - $i;
+        $firstImage = array_values(array_diff(scandir(PATH_IMPORT . "/" . $searchFolders[$i]), array(".", "..")))[0];
+        $lien = sizeof($searchFolders) - $i;
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="/import/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $tabs[$i] . '">' . $tabs[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . PATH_IMPORT . $tabs[$i] . "/" . $firstImage . '" alt="">
+                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                        <img class="img-fluid img-thumbnail" src="' . PATH_IMPORT . $searchFolders[$i] . "/" . $firstImage . '" alt="">
                     </a>
                 </div>';
     }
