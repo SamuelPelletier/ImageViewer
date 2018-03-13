@@ -33,11 +33,17 @@ $(document).ready(function () {
     $.get(url, function (data) {
         $(".loader").fadeOut("slow");
         $("body").append(data);
-        $("#search").val($_GET()['search'])
+        if('search' in $_GET()){
+            var searchData = $_GET()['search']
+            searchData =  decodeURI(searchData);
+            searchData = searchData.substr(1)
+            searchData = searchData.substring(0, searchData.length-1)
+            $("#search").val(searchData)
+        }
         $('#search').keypress(function(e) {
             var keycode = (e.keyCode ? e.keyCode : e.which);
             if (keycode == '13') {
-                search()
+                search();
             }
         });
         flagLoad = true;
@@ -54,10 +60,10 @@ function search(){
         if(param['page'] > 1){
             param['page'] = 1
         }
-        param['search'] = $("#search").val();
+        param['search'] = "'"+$("#search").val()+"'";
         newUrl = window.location.origin + window.location.pathname + '?' + Object.keys(param).map(key => key + '=' + param[key]).join('&')
     }else{
-        newUrl = document.URL+'?'+'search='+$("#search").val()
+        newUrl = document.URL+'?'+"search='"+$("#search").val()+"'"
     }
     window.location = newUrl;
 }

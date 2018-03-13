@@ -58,22 +58,27 @@ function home_page()
     }else{
         $searchFolders = $allFolders;
     }
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-    for ($i = 0; $i < $size; $i++) {
-        if ($i % 4 == 0) {
-            echo "\n";
+
+    if(sizeof($searchFolders) > 0){
+        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+        for ($i = 0; $i < $size; $i++) {
+            if ($i % 4 == 0) {
+                echo "\n";
+            }
+            $firstImage = array_values(array_diff(scandir($link . "/" . $searchFolders[$i]), array(".", "..")))[0];
+            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            echo '
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                        <a href="./?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
+                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                            <img class="img-fluid img-thumbnail" src="' . $link . $searchFolders[$i]. "/" . $firstImage . '" alt="">
+                        </a>
+                    </div>';
         }
-        $firstImage = array_values(array_diff(scandir($link . "/" . $searchFolders[$i]), array(".", "..")))[0];
-        $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="./?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . $link . $searchFolders[$i] . "/" . $firstImage . '" alt="">
-                    </a>
-                </div>';
+    }else{
+        echo 'Sorry, no results found =/';
     }
     echo "</div>";
 }
@@ -89,23 +94,27 @@ function home_page_all()
     }else{
         $searchFolders = $allFolders;
     }
-    $page = check_page();
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-    for ($i = 0; $i < $size; $i++) {
-        if ($i % 4 == 0) {
-            echo "\n";
+    if(sizeof($searchFolders) > 1){
+        $page = check_page();
+        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+        for ($i = 0; $i < $size; $i++) {
+            if ($i % 4 == 0) {
+                echo "\n";
+            }
+            $firstImage = array_values(array_diff(scandir(PATH_ALL . "/" . $searchFolders[$i]), array(".", "..")))[0];
+            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            echo '
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                        <a href="/all/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
+                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                            <img class="img-fluid img-thumbnail" src="' . PATH_ALL . $searchFolders[$i] . "/" . $firstImage . '" alt="">
+                        </a>
+                    </div>';
         }
-        $firstImage = array_values(array_diff(scandir(PATH_ALL . "/" . $searchFolders[$i]), array(".", "..")))[0];
-        $lien = sizeof($searchFolders) - $i;
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="/all/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . PATH_ALL . $searchFolders[$i] . "/" . $firstImage . '" alt="">
-                    </a>
-                </div>';
+    }else{
+        echo 'Sorry, no results found =/';
     }
     echo "</div>";
 }
@@ -122,24 +131,28 @@ function home_page_import()
     }else{
         $searchFolders = $allFolders;
     }
-    $page = check_page();
 
-    echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-    for ($i = 0; $i < $size; $i++) {
-        if ($i % 4 == 0) {
-            echo "\n";
+    if(sizeof($searchFolders) > 1){
+        $page = check_page();
+        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+        for ($i = 0; $i < $size; $i++) {
+            if ($i % 4 == 0) {
+                echo "\n";
+            }
+            $firstImage = array_values(array_diff(scandir(PATH_IMPORT . "/" . $searchFolders[$i]), array(".", "..")))[0];
+            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            echo '
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                        <a href="/import/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
+                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                            <img class="img-fluid img-thumbnail" src="' . PATH_IMPORT . $searchFolders[$i] . "/" . $firstImage . '" alt="">
+                        </a>
+                    </div>';
         }
-        $firstImage = array_values(array_diff(scandir(PATH_IMPORT . "/" . $searchFolders[$i]), array(".", "..")))[0];
-        $lien = sizeof($searchFolders) - $i;
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="/import/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                        <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                        <img class="img-fluid img-thumbnail" src="' . PATH_IMPORT . $searchFolders[$i] . "/" . $firstImage . '" alt="">
-                    </a>
-                </div>';
+    }else{
+        echo 'Sorry, no results found =/';
     }
     echo "</div>";
 }
@@ -187,7 +200,7 @@ function displayImages($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . $name . "&path=".$link."'";
+    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$link."'";
     echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
@@ -214,7 +227,7 @@ function displayImagesAll($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . $name . "&path=".PATH_ALL."'";
+    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".PATH_ALL."'";
     echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
@@ -241,7 +254,7 @@ function displayImagesImport($path)
     $name = end($path_array);
 
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . $name . "&path=".PATH_IMPORT."'";
+    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".PATH_IMPORT."'";
     echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
 
@@ -282,11 +295,11 @@ function scandirByModifiedDate($dir)
 
 function searchByName($path, $allFolders, $name){
     $result = array();
+    $name = substr($name, 1,strlen($name)-2);
     foreach($allFolders as $key => $data){
-        if(preg_match('/.*'.strtoupper($name).'.*/',strtoupper($data))){
+        if (strpos(strtoupper($data), strtoupper($name)) !== false) {
             array_push($result, $data);
         }
     }
     return $result;
-
 }
