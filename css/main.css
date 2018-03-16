@@ -664,3 +664,69 @@ li:last-child .page {
     z-index: 1;
     width: 100px;
 }
+
+@import url(//fonts.googleapis.com/css?family=Lato:700);
+
+
+.notfound {
+    overflow: hidden;
+    position: relative;
+    left: 40%;
+}
+
+@-webkit-keyframes eye-blink {
+    95% { color: #bbb; text-shadow: 3px 0 0 #4c4c4c; }
+    100% { color: #4c4c4c; text-shadow: 3px 0 0 #bbb; }
+}
+@-moz-keyframes eye-blink {
+    95% { color: #bbb; text-shadow: 3px 0 0 #4c4c4c; }
+    100% { color: #4c4c4c; text-shadow: 3px 0 0 #bbb; }
+}
+@-o-keyframes eye-blink {
+    95% { color: #bbb; text-shadow: 3px 0 0 #4c4c4c; }
+    100% { color: #4c4c4c; text-shadow: 3px 0 0 #bbb; }
+}
+@keyframes eye-blink {
+    95% { color: #bbb; text-shadow: 3px 0 0 #4c4c4c; }
+    100% { color: #4c4c4c; text-shadow: 3px 0 0 #bbb; }
+}
+
+.face {
+    color: #bbb;
+    line-height: 0.8;
+    font-size: 300px;
+    margin-bottom: 120px;
+    position: relative;
+    left:20%;
+}
+.face .eyes {
+    text-shadow: 3px 0 0 #4c4c4c;
+    -webkit-animation: eye-blink 3s infinite;
+    -moz-animation: eye-blink 3s infinite;
+    -o-animation: eye-blink 3s infinite;
+    animation: eye-blink 3s infinite;
+}
+.face-smile .eyes {
+    color: #4c4c4c;
+    text-shadow: -5px 0 0 #bbb;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
+}
+.face-smile .mouth {
+    display: inline-block;
+    -webkit-transition: all .7s ease;
+    -webkit-transform: rotateY(180deg);
+    -moz-transition: all .7s ease;
+    -moz-transform: rotateY(180deg);
+    -o-transition: all .7s ease;
+    -o-transform: rotate(180deg);
+    transition: all .7s ease;
+    transform: rotateY(180deg);
+}
+.message {
+    font-size: 28px;
+    color: #E84A5F;
+    text-align: center;
+}

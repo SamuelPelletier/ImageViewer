@@ -34,30 +34,7 @@
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
             <input type="text" name="search" id="search"><button class="searchButton" onclick="search()">Search</button>
                 <?php
-                $parts = parse_url($_SERVER['HTTP_REFERER']);
-		        parse_str($parts['query'], $path);
-		        $number = $path['number'];
-
-		        switch ($parts['path']){
-                    case "/import":
-                    case "/import/":
-                        $number != null ? displayImagesImport(ltrim($number,"/")) : home_page_import();
-                        break;
-                    case "/all":
-                    case "/all/":
-                        $number != null ? displayImagesAll(ltrim($number,"/")) : home_page_all();
-                        break;
-                    case "/about" :
-                    case "/about/":
-                        home_page_about();
-                        break;
-                    case "/upload":
-                    case"/upload/":
-                        home_page_upload();
-                        break;
-                    default:
-                        $number != null ? displayImages(ltrim($number,"/")) : home_page();
-                }
+                check_routing();
                 ?>
         </div>
     </div>

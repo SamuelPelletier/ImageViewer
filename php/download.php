@@ -45,7 +45,6 @@ $file = $_GET["path"].$name.'/';
 			if($test != false){
 				unlink($name.'.zip');
 			}
-      //unlink($name.'.zip');
 	}
 	else
 	{

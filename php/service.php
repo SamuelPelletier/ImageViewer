@@ -16,12 +16,39 @@ const TITLE = "MyWebSite";
 
 //---------- Checker -----------
 
+function check_routing(){
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    isset($parts['query']) ? parse_str($parts['query'], $path) : null;
+    $number = isset($path['number']) ? $path['number'] : null;
+
+    switch ($parts['path']){
+        case "/import":
+        case "/import/":
+            $number != null ? displayImagesImport(ltrim($number,"/")) : home_page_import();
+            break;
+        case "/all":
+        case "/all/":
+            $number != null ? displayImagesAll(ltrim($number,"/")) : home_page_all();
+            break;
+        case "/about" :
+        case "/about/":
+            home_page_about();
+            break;
+        case "/upload":
+        case"/upload/":
+            home_page_upload();
+            break;
+        default:
+            $number != null ? displayImages(ltrim($number,"/")) : home_page();
+    }
+}
+
 function check_link()
 {
     $parts = parse_url($_SERVER['HTTP_REFERER']);
-    parse_str($parts['query'], $path);
+    isset($parts['query']) ? parse_str($parts['query'], $path) : null;
     $link = PATH;
-    if ($path['safe'] == "false") {
+    if (isset($path['safe']) && $path['safe'] == "false") {
         $link = PATH_NS;
     }
     return $link;
@@ -32,7 +59,7 @@ function check_page(){
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     if (array_key_exists('query', $parts)) {
         parse_str($parts['query'], $query);
-        $page = $query["page"];
+        $page = isset($query["page"]) ? $query["page"] : 1;
     }
     return $page;
 }
@@ -146,12 +173,12 @@ function searchByName($path, $allFolders, $name){
 function createContent($pageName, $pathConst){
     $page = check_page();
     $safe = "";
-    if ($link == PATH_NS) {
+    if ($pathConst == PATH_NS) {
         $safe = "&safe=false";
     }
     $allFolders = scandirByModifiedDate($pathConst);
     $parts = parse_url($_SERVER['HTTP_REFERER']);
-    parse_str($parts['query'], $path);
+    isset($parts['query']) ? parse_str($parts['query'], $path) : null;
     if( isset($path['search']) &&  $path['search'] != null){
         $searchFolders = searchByName($pathConst,$allFolders,$path['search']);
     }else{
@@ -177,7 +204,10 @@ function createContent($pageName, $pathConst){
                     </div>';
         }
     }else{
-        echo 'Sorry, no results found =/';
+        echo '<div class="notfound">
+            <div class="face"><span class="eyes">:</span><span class="mouth">(</span></div>
+            <p class="message">Oops, we have no result ...</p>
+        </div>';
     }
     echo "</div>";
 }
