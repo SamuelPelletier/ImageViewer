@@ -44,117 +44,20 @@ function home_page()
 {
     echo "<h1>Best</h1><div class=\"row text-center text-lg-left\">";
     $link = check_link();
-    $page = check_page();
-    $safe = "";
-    if ($link == PATH_NS) {
-        $safe = "&safe=false";
-    }
+    createContent('/',$link);
     
-    $allFolders = scandirByModifiedDate($link);
-    $parts = parse_url($_SERVER['HTTP_REFERER']);
-    parse_str($parts['query'], $path);
-    if( isset($path['search']) &&  $path['search'] != null){
-        $searchFolders = searchByName($link,$allFolders,$path['search']);
-    }else{
-        $searchFolders = $allFolders;
-    }
-
-    if(sizeof($searchFolders) > 0){
-        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-        for ($i = 0; $i < $size; $i++) {
-            if ($i % 4 == 0) {
-                echo "\n";
-            }
-            $firstImage = array_values(array_diff(scandir($link . "/" . $searchFolders[$i]), array(".", "..")))[0];
-            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
-            echo '
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="./?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
-                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                            <img class="img-fluid img-thumbnail" src="' . $link . $searchFolders[$i]. "/" . $firstImage . '" alt="">
-                        </a>
-                    </div>';
-        }
-    }else{
-        echo 'Sorry, no results found =/';
-    }
-    echo "</div>";
 }
 
 function home_page_all()
 {
     echo "<h1>All</h1><div class=\"row text-center text-lg-left\">";
-    $parts = parse_url($_SERVER['HTTP_REFERER']);
-    parse_str($parts['query'], $path);
-    $allFolders = scandirByModifiedDate(PATH_ALL);
-    if( isset($path['search']) &&  $path['search'] != null){
-        $searchFolders = searchByName(PATH_ALL,$allFolders,$path['search']);
-    }else{
-        $searchFolders = $allFolders;
-    }
-    if(sizeof($searchFolders) > 1){
-        $page = check_page();
-        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-        for ($i = 0; $i < $size; $i++) {
-            if ($i % 4 == 0) {
-                echo "\n";
-            }
-            $firstImage = array_values(array_diff(scandir(PATH_ALL . "/" . $searchFolders[$i]), array(".", "..")))[0];
-            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
-            echo '
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="/all/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                            <img class="img-fluid img-thumbnail" src="' . PATH_ALL . $searchFolders[$i] . "/" . $firstImage . '" alt="">
-                        </a>
-                    </div>';
-        }
-    }else{
-        echo 'Sorry, no results found =/';
-    }
-    echo "</div>";
+    createContent('/all/',PATH_ALL);
 }
 
 function home_page_import()
 {
     echo "<h1>Import</h1><div class=\"row text-center text-lg-left\">";
-
-    $parts = parse_url($_SERVER['HTTP_REFERER']);
-    parse_str($parts['query'], $path);
-    $allFolders = scandirByModifiedDate(PATH_IMPORT);
-    if( isset($path['search']) &&  $path['search'] != null){
-        $searchFolders = searchByName(PATH_IMPORT,$allFolders,$path['search']);
-    }else{
-        $searchFolders = $allFolders;
-    }
-
-    if(sizeof($searchFolders) > 1){
-        $page = check_page();
-        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-        for ($i = 0; $i < $size; $i++) {
-            if ($i % 4 == 0) {
-                echo "\n";
-            }
-            $firstImage = array_values(array_diff(scandir(PATH_IMPORT . "/" . $searchFolders[$i]), array(".", "..")))[0];
-            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
-            echo '
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="/import/?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
-                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
-                            <img class="img-fluid img-thumbnail" src="' . PATH_IMPORT . $searchFolders[$i] . "/" . $firstImage . '" alt="">
-                        </a>
-                    </div>';
-        }
-    }else{
-        echo 'Sorry, no results found =/';
-    }
-    echo "</div>";
+    createContent('/import/',PATH_IMPORT);
 }
 
 function home_page_upload()
@@ -193,84 +96,17 @@ function home_page_about()
 function displayImages($path)
 {
     $link = check_link();
-    $tabs = scandirByModifiedDate($link);
-    $path = $link . $tabs[sizeof($tabs) - $path];
-    $tabs = array_diff(scandir($path), array(".", ".."));
-    $path_array = explode('/',$path);
-    $name = end($path_array);
-
-    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$link."'";
-    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
-
-    for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
-        $src = $path . '/' . $tabs[$i];
-        $src = str_replace("'", "\'", $src);
-        $src = "'" . $src . "'";
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
-                        <img class="img-fluid img-thumbnail" src="' . $path . '/' . $tabs[$i] . '" alt="">
-                    </a>
-                </div>';
-    }
-    echo "</div>";
-    echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
+    createDisplay($link, $path);
 }
 
 function displayImagesAll($path)
 {
-    $tabs = scandirByModifiedDate(PATH_ALL);
-    $path = PATH_ALL . $tabs[sizeof($tabs) - $path];
-    $tabs = array_diff(scandir($path), array(".", ".."));
-    $path_array = explode('/',$path);
-    $name = end($path_array);
-
-    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".PATH_ALL."'";
-    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
-
-    for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
-        $src = $path . '/' . $tabs[$i];
-        $src = str_replace("'", "\'", $src);
-        $src = "'" . $src . "'";
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
-                        <img class="img-fluid img-thumbnail" src="' . $path . '/' . $tabs[$i] . '" alt="">
-                    </a>
-                </div>';
-    }
-    echo "</div>";
-    echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
+    createDisplay(PATH_ALL,$path);
 }
 
 function displayImagesImport($path)
 {
-    $tabs = scandirByModifiedDate(PATH_IMPORT);
-    $path = PATH_IMPORT . $tabs[sizeof($tabs) - $path];
-    $tabs = array_diff(scandir($path), array(".", ".."));
-    $path_array = explode('/',$path);
-    $name = end($path_array);
-
-    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
-    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".PATH_IMPORT."'";
-    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
-
-
-    for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
-        $src = $path . '/' . $tabs[$i];
-        $src = str_replace("'", "\'", $src);
-        $src = "'" . $src . "'";
-        echo '
-            <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
-                        <img class="img-fluid img-thumbnail" src="' . $path . '/' . $tabs[$i] . '" alt="">
-                    </a>
-                </div>';
-    }
-    echo "</div>";
-    echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
+    createDisplay(PATH_IMPORT, $path);
 }
 
 // --------- Other ----------
@@ -296,10 +132,79 @@ function scandirByModifiedDate($dir)
 function searchByName($path, $allFolders, $name){
     $result = array();
     $name = substr($name, 1,strlen($name)-2);
+    if($name == ''){
+        return $allFolders;
+    }
     foreach($allFolders as $key => $data){
         if (strpos(strtoupper($data), strtoupper($name)) !== false) {
             array_push($result, $data);
         }
     }
     return $result;
+}
+
+function createContent($pageName, $pathConst){
+    $page = check_page();
+    $safe = "";
+    if ($link == PATH_NS) {
+        $safe = "&safe=false";
+    }
+    $allFolders = scandirByModifiedDate($pathConst);
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $path);
+    if( isset($path['search']) &&  $path['search'] != null){
+        $searchFolders = searchByName($pathConst,$allFolders,$path['search']);
+    }else{
+        $searchFolders = $allFolders;
+    }
+
+    if(sizeof($searchFolders) > 0){
+        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
+        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+        for ($i = 0; $i < $size; $i++) {
+            if ($i % 4 == 0) {
+                echo "\n";
+            }
+            $firstImage = array_values(array_diff(scandir($pathConst . "/" . $searchFolders[$i]), array(".", "..")))[0];
+            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            echo '
+                <div class="col-lg-3 col-md-4 col-xs-6">
+                        <a href="'.$pageName.'?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
+                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                            <img class="img-fluid img-thumbnail" src="' . $pathConst . $searchFolders[$i]. "/" . $firstImage . '" alt="">
+                        </a>
+                    </div>';
+        }
+    }else{
+        echo 'Sorry, no results found =/';
+    }
+    echo "</div>";
+}
+
+function createDisplay($pathConst, $path){
+    $tabs = scandirByModifiedDate($pathConst);
+    $path = $pathConst . $tabs[sizeof($tabs) - $path];
+    $tabs = array_diff(scandir($path), array(".", ".."));
+    $path_array = explode('/',$path);
+    $name = end($path_array);
+
+    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$pathConst."'";
+    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
+
+
+    for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
+        $src = $path . '/' . $tabs[$i];
+        $src = str_replace("'", "\'", $src);
+        $src = "'" . $src . "'";
+        echo '
+            <div class="col-lg-3 col-md-4 col-xs-6">
+                    <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
+                        <img class="img-fluid img-thumbnail" src="' . $path . '/' . $tabs[$i] . '" alt="">
+                    </a>
+                </div>';
+    }
+    echo "</div>";
+    echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
 }
