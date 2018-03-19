@@ -238,3 +238,7 @@ function createDisplay($pathConst, $path){
     echo "</div>";
     echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
 }
+
+function getAllTags(){
+    
+}
