@@ -10,6 +10,7 @@ const PATH = "../media/autre/";
 const PATH_NS = "../media/nosafe/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
+const PATH_DATABASE_TAGS = "../database/tags.json";
 const PAGINATION = 20;
 const TITLE = "MyWebSite";
 
@@ -162,9 +163,15 @@ function searchByName($path, $allFolders, $name){
     if($name == ''){
         return $allFolders;
     }
-    foreach($allFolders as $key => $data){
+    foreach($allFolders as $data){
         if (strpos(strtoupper($data), strtoupper($name)) !== false) {
             array_push($result, $data);
+        }
+    }
+    $tagData = getDataOfTag($name);
+    foreach($tagData as $value){
+        if(!in_array($value, $result)){
+            array_push($result, $value);
         }
     }
     return $result;
@@ -197,7 +204,7 @@ function createContent($pageName, $pathConst){
             $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="'.$pageName.'?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
+                        <a href="'.$pageName.'?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
                             <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
                             <img class="img-fluid img-thumbnail" src="' . $pathConst . $searchFolders[$i]. "/" . $firstImage . '" alt="">
                         </a>
@@ -240,5 +247,27 @@ function createDisplay($pathConst, $path){
 }
 
 function getAllTags(){
-    
+    // Read JSON file
+    $json = file_get_contents(PATH_DATABASE_TAGS);
+
+    //Decode JSON
+    $json_data = json_decode($json,true);
+    return $json_data;
+}
+
+function getAllTagsName(){
+    $data = getAllTags();
+    $tags = array();
+    foreach($data as $tag =>$dataTag){
+        array_push($tags,$tags);
+    }
+    return $tags;
+}
+
+function getDataOfTag($tag){
+    $data = getAllTags();
+    if(array_key_exists($tag,$data)){
+        return $data[$tag];
+    }
+    return null;
 }
