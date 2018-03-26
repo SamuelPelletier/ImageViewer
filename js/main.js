@@ -63,7 +63,7 @@ function search(){
         param['search'] = "'"+$("#search").val()+"'";
         newUrl = window.location.origin + window.location.pathname + '?' + Object.keys(param).map(key => key + '=' + param[key]).join('&')
     }else{
-        newUrl = document.URL+'?'+"search='"+$("#search").val()+"'"
+        newUrl = window.location.origin + window.location.pathname +'?'+"search='"+$("#search").val()+"'"
     }
     window.location = newUrl;
 }

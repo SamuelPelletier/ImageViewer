@@ -7,7 +7,6 @@
  */
 
 const PATH = "../media/autre/";
-const PATH_NS = "../media/nosafe/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
 const PAGINATION = 20;
@@ -43,17 +42,6 @@ function check_routing(){
     }
 }
 
-function check_link()
-{
-    $parts = parse_url($_SERVER['HTTP_REFERER']);
-    isset($parts['query']) ? parse_str($parts['query'], $path) : null;
-    $link = PATH;
-    if (isset($path['safe']) && $path['safe'] == "false") {
-        $link = PATH_NS;
-    }
-    return $link;
-}
-
 function check_page(){
     $page = 1;
     $parts = parse_url($_SERVER['HTTP_REFERER']);
@@ -70,8 +58,7 @@ function check_page(){
 function home_page()
 {
     echo "<h1>Best</h1><div class=\"row text-center text-lg-left\">";
-    $link = check_link();
-    createContent('/',$link);
+    createContent('/',PATH);
     
 }
 
@@ -122,8 +109,7 @@ function home_page_about()
 
 function displayImages($path)
 {
-    $link = check_link();
-    createDisplay($link, $path);
+    createDisplay(PATH, $path);
 }
 
 function displayImagesAll($path)
@@ -172,10 +158,6 @@ function searchByName($path, $allFolders, $name){
 
 function createContent($pageName, $pathConst){
     $page = check_page();
-    $safe = "";
-    if ($pathConst == PATH_NS) {
-        $safe = "&safe=false";
-    }
     $allFolders = scandirByModifiedDate($pathConst);
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     isset($parts['query']) ? parse_str($parts['query'], $path) : null;
@@ -197,7 +179,7 @@ function createContent($pageName, $pathConst){
             $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="'.$pageName.'?number=' . $lien . $safe . '" class="d-block mb-4 h-100 img-cell">
+                        <a href="'.$pageName.'?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
                             <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
                             <img class="img-fluid img-thumbnail" src="' . $pathConst . $searchFolders[$i]. "/" . $firstImage . '" alt="">
                         </a>
