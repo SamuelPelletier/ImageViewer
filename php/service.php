@@ -9,6 +9,7 @@
 const PATH = "../media/autre/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
+const PATH_DATABASE_TAGS = "../database/tags.json";
 const PAGINATION = 20;
 const TITLE = "MyWebSite";
 
@@ -122,39 +123,7 @@ function displayImagesImport($path)
     createDisplay(PATH_IMPORT, $path);
 }
 
-// --------- Other ----------
-
-
-function scandirByModifiedDate($dir)
-{
-    $page = check_page();
-    $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
-    $page--;
-    $files = array();
-    foreach (scandir($dir) as $key => $file) {
-        if (in_array($file, $ignored)) continue;
-        $files[$file] = filemtime($dir . '/' . $file);
-    }
-
-    arsort($files);
-    $files = array_keys($files);
-
-    return ($files) ? $files : false;
-}
-
-function searchByName($path, $allFolders, $name){
-    $result = array();
-    $name = substr($name, 1,strlen($name)-2);
-    if($name == ''){
-        return $allFolders;
-    }
-    foreach($allFolders as $key => $data){
-        if (strpos(strtoupper($data), strtoupper($name)) !== false) {
-            array_push($result, $data);
-        }
-    }
-    return $result;
-}
+// --------- Create ----------
 
 function createContent($pageName, $pathConst){
     $page = check_page();
@@ -162,15 +131,17 @@ function createContent($pageName, $pathConst){
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     isset($parts['query']) ? parse_str($parts['query'], $path) : null;
     if( isset($path['search']) &&  $path['search'] != null){
-        $searchFolders = searchByName($pathConst,$allFolders,$path['search']);
+        $searchFolders = search($pathConst,$allFolders,$path['search']);
     }else{
         $searchFolders = $allFolders;
     }
 
-    if(sizeof($searchFolders) > 0){
-        echo '<script>createPagination(' . PAGINATION . ',' . sizeof($searchFolders) . ',' . $page . ')</script>';
-        $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
-        $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+    $total = sizeof($searchFolders);
+    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+    $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
+
+    if($size > 0){
+        echo '<script>createPagination(' . PAGINATION . ',' . $total. ',' . $page . ')</script>';
         for ($i = 0; $i < $size; $i++) {
             if ($i % 4 == 0) {
                 echo "\n";
@@ -219,4 +190,105 @@ function createDisplay($pathConst, $path){
     }
     echo "</div>";
     echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
+}
+
+// --------- Other ----------
+
+
+function scandirByModifiedDate($dir)
+{
+    $page = check_page();
+    $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
+    $page--;
+    $files = array();
+    foreach (scandir($dir) as $key => $file) {
+        if (in_array($file, $ignored)) continue;
+        $files[$file] = filemtime($dir . '/' . $file);
+    }
+
+    arsort($files);
+    $files = array_keys($files);
+
+    return ($files) ? $files : false;
+}
+
+function search($path, $allFolders, $name){
+    $result = array();
+    $name = trim(substr($name, 1,strlen($name)-2));
+    if($name == ''){
+        return $allFolders;
+    }
+    $partSearch = explode(" ",$name);
+    $partSearch = array_diff($partSearch, getAllTagsName());
+
+    foreach($partSearch as $part){
+        $temp = array();
+        foreach($allFolders as $data){
+            if (strpos(strtoupper($data), strtoupper($part)) !== false) {
+                array_push($temp, $data);
+            }
+        }
+        array_push($result, $temp);
+    }
+
+    if(count($result) == 1){
+        $result = $result[0];
+    }else if(count($result) == 2){
+        $result = array_intersect($result[0], $result[1]);
+    }else if(count($result) > 2){
+        $result = call_user_func_array('array_intersect',$result);
+    }
+
+    $tagData = getDataOfTag($name);
+    if(count($tagData) > 0 && count($result) > 0 ){
+        $result = array_intersect($result, $tagData);
+    }else if(count($result) == 0 && count($partSearch) > 0){
+        $result = array_intersect($result, $tagData);
+    }else if(count($result) == 0){
+        $result = $tagData;
+    }
+    return $result;
+}
+
+function getAllTags(){
+    // Read JSON file
+    $json = file_get_contents(PATH_DATABASE_TAGS);
+
+    //Decode JSON
+    $json_data = json_decode($json,true);
+    return $json_data;
+}
+
+function convertInWord($search){
+   return explode(" ", $search);
+}
+
+function getAllTagsName(){
+    $data = getAllTags();
+    $tags = array();
+    foreach($data as $tag =>$dataTag){
+        array_push($tags,$tag);
+    }
+    return $tags;
+}
+
+function getDataOfTag($search){
+    $tags = convertInWord($search);
+    $data = getAllTags();
+    $result = array();
+    foreach($tags as $tag){
+        if(array_key_exists($tag,$data)){
+            array_push($result,$data[$tag]);
+        }
+    }
+
+    if(count($result) == 1){
+        $result = $result[0];
+    }else if( count($result) == 0){
+    }else if(count($result) == 2){
+        $result = array_intersect($result[0],$result[1]);
+    }else{
+        $result = call_user_func_array('array_intersect',$result);
+    }
+    return $result;
 }

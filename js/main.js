@@ -100,7 +100,7 @@ function createPagination(pagination, nbrItems, page) {
     var pagePrev = (page - 1 <= 0) ? 1 : page - 1
     var pageNext = (page + 1 > nbrPage) ? nbrPage : page + 1
 
-    $('.container-fluid').append('<ul style="margin-left: calc(50% - 34px *' + size + ')" class="pagination"></ul>')
+    $('.container-fluid').append('<div class="pagination-block"><ul class="pagination"></ul></div>')
     $('.pagination').append('<li><a href="?page=' + pagePrev + safeUrl + '" class="prev">&laquo</a></li>')
     for (i; i <= nbrPage; i++) { // 5 - 1 - 5
         var active = (page == i ) ? 'active' : ''
