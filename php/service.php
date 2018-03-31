@@ -99,9 +99,16 @@ function home_page_upload()
 
 function home_page_about()
 {
-    echo "<h1>About</h1><div class=\"row text-center text-lg-left\">";
-    echo '<div>hello world!</div>';
-    echo "</div>";
+    echo "<h1>About</h1><div class='row text-center text-lg-left about'>";
+    echo '<h2>hello world !</h2>';
+    echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
+    echo '<h2>List of tags</h2><div>';
+    $tagNames = getAllTagsName();
+    sort($tagNames);
+    foreach($tagNames as $tagName){
+        echo $tagName.' ('.count($tagName).')'.'</br>';
+    }
+    echo "</div></div>";
 }
 
 
@@ -218,7 +225,7 @@ function search($path, $allFolders, $name){
     if($name == ''){
         return $allFolders;
     }
-    $partSearch = explode(" ",$name);
+    $partSearch = convertInWord($name);;
     $partSearch = array_diff($partSearch, getAllTagsName());
 
     foreach($partSearch as $part){
@@ -242,8 +249,8 @@ function search($path, $allFolders, $name){
     $tagData = getDataOfTag($name);
     if(count($tagData) > 0 && count($result) > 0 ){
         $result = array_intersect($result, $tagData);
-    }else if(count($result) == 0 && count($partSearch) > 0){
-        $result = array_intersect($result, $tagData);
+    }else if($result > 0 && $tagData === 0){
+        $result = $result;
     }else if(count($result) == 0){
         $result = $tagData;
     }
@@ -272,6 +279,17 @@ function getAllTagsName(){
     return $tags;
 }
 
+function getAllCompositeTagsName(){
+    $data = getAllTags();
+    $tags = array();
+    foreach($data as $tag =>$dataTag){
+        if(preg_match("/^[a-z]+\s/",$tag) == 1){
+            array_push($tags,$tag);
+        }
+    }
+    return $tags;
+}
+
 function getDataOfTag($search){
     $tags = convertInWord($search);
     $data = getAllTags();
@@ -282,6 +300,10 @@ function getDataOfTag($search){
         }
     }
 
+    if(count($tags) > 1){
+        $result = getDataOfCompositeTag($search, $result);
+    }
+    
     if(count($result) == 1){
         $result = $result[0];
     }else if( count($result) == 0){
@@ -289,6 +311,17 @@ function getDataOfTag($search){
         $result = array_intersect($result[0],$result[1]);
     }else{
         $result = call_user_func_array('array_intersect',$result);
+    }
+    return $result;
+}
+
+function getDataOfCompositeTag($search, $result){
+    $tagsName = getAllCompositeTagsName();
+    $data = getAllTags();
+    foreach($tagsName as $tag){
+        if(array_key_exists($tag,$data) && strpos($tag, $search) !== false) {
+            array_push($result,$data[$tag]);
+        }
     }
     return $result;
 }
