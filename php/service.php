@@ -104,10 +104,9 @@ function home_page_about()
     echo '<h2>hello world !</h2>';
     echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
     echo '<h2>List of tags</h2><div>';
-    $tagNames = getAllTagsName();
-    sort($tagNames);
-    foreach($tagNames as $tagName){
-        echo $tagName.' ('.count($tagName).')'.'</br>';
+    $tagNames = getAllTags();
+    foreach($tagNames as $tagName => $data){
+        echo $tagName.' ('.count($data).')'.'</br>';
     }
     echo "</div></div>";
 }
