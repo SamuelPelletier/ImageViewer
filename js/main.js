@@ -33,6 +33,7 @@ $(document).ready(function () {
     $.get(url, function (data) {
         $(".loader").fadeOut("slow");
         $("body").append(data);
+        manageTag();
         if('search' in $_GET()){
             var searchData = $_GET()['search']
             searchData =  decodeURI(searchData);
@@ -338,4 +339,68 @@ function $_GET(param) {
 		return vars[param] ? vars[param] : null;	
 	}
 	return vars;
+}
+
+function manageTag(){
+    var path = "/php/add_tag.php?name="+$("h1").text()
+    var listTag = []
+    $.each($('.tag'),function(key,value){
+        listTag.push($(value).text().slice(0,-1))
+    })
+
+    $('.add-tag').hide()
+    $('.valid-tag').hide()
+    $('.remove').hide()
+    $(".dropdown").on("click", ".modify-tag", function() {
+        $('.modify-tag').hide("slow")
+        $('.add-tag').show("slow")
+        $('.valid-tag').show("slow")
+        $('.remove').show()
+    });
+    $(".dropdown").on("click", ".valid-tag", function() {
+        $('.remove').hide()
+        $('.add-tag').hide("slow")
+        $('.valid-tag').hide("slow")
+        $('.modify-tag').show("slow")
+        $(".dropdown").removeClass("open");
+        if(listTag.length > 0){
+            path = path + "&tags=";
+            $.each(listTag,function(key,value){
+                if(key == listTag.length-1){
+                    path = path + value
+                }else{
+                    path = path + value + ","
+                }
+            })
+            window.open(path)
+        }
+    });
+        // Dropdown
+    $(".dropdown").on("click", ".add-tag", function() {
+        
+        if ( $(".dropdown").hasClass("open") ) {
+            $(".dropdown").removeClass("open");
+        } else {
+            $(".dropdown").addClass("open");
+        }
+    });
+
+    // Add Tags
+    $(".dropdown").on("click", ".dropdown-menu > li", function() {
+        if ( !$(this).hasClass("added") ) {
+        $(this).addClass("added");
+        listTag.push($(this).text())
+        $(".tag-area").append('<div class="tag">' + $(this).text() + '<span class="remove">×</span></div>');
+        }
+    });
+
+    // Remove Tags
+    $(".tag-area").on("click", ".tag > span", function() {
+        $(this).parent().remove();
+        listTag.splice( listTag.indexOf($(this).parent().text().slice(0,-1)), 1 );
+        var objectText = $(this).parent().text().slice(0,-1);
+        
+        $(".dropdown-menu > li:contains('" + objectText + "')").removeClass("added");
+    });
+  
 }

@@ -744,3 +744,172 @@ li:last-child .page {
     color: #E84A5F;
     text-align: center;
 }
+
+#download-title{
+    width:100%;
+    display: -webkit-box;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700);
+
+.dropdown-menu {
+  display: inline-block;
+  list-style: none;
+  list-style-type: none;
+  list-style-position: none;
+  border-bottom: none;
+  margin: 0;
+  -moz-list-style: none none none;
+  -moz-margin-before: 0;
+  -moz-margin-after: 0;
+  -moz-margin-start: 0;
+  -moz-margin-end: 0;
+  -moz-padding-start: 0;
+  -webkit-list-style: none none none;
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0;
+  -webkit-margin-end: 0;
+  -webkit-padding-start: 0;
+}
+.dropdown-menu li {
+  display: inline-block;
+}
+.tag-container {
+  zoom: 1;
+}
+.tag-container:after, .tag-container:before {
+  content: "";
+  display: table;
+}
+.tag-container:after {
+  clear: both;
+}
+.tag-container {
+  font-family: "Source Sans Pro", sans-serif;
+}
+
+h4 {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 13px;
+  color: #ccc;
+  font-weight: 600;
+  float: left;
+  margin: 0;
+  line-height: 32px;
+}
+.tag-area {
+  height: auto;
+  min-height: 50px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  padding: 10px 10px 5px 10px;
+  float: left;
+}
+.tag {
+  position: relative;
+  width: auto;
+  height: 30px;
+  padding: 0 10px;
+  line-height: 32px;
+  background: #007bff;
+  float: left;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 5px 5px 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.tag span {
+  position: absolute;
+  top: 0;
+  right: -30px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  background: rgba(46, 112, 130, 0.8);
+  transition: right ease 200ms;
+}
+.tag:hover {
+  cursor: pointer;
+}
+.tag:hover span {
+  right: 0;
+}
+.dropdown {
+  position: relative;
+  float: left;
+  margin: 0 10px;
+  width: auto;
+}
+.dropdown .add-tag,.valid-tag,.modify-tag {
+  display: inline-block;
+  border-bottom: 1px solid #007bff;
+  padding: 0 8px;
+  line-height: 28px;
+  font-size: 14px;
+  color: #007bff;
+}
+
+.valid-tag{
+    color: #E84A5F; 
+    border-bottom: 1px solid #E84A5F;
+}
+.dropdown .add-tag:hover,.valid-tag:hover,.modify-tag:hover,.valid-tag:hover {
+  cursor: pointer;
+  background: #007bff;
+  color: #fff;
+}
+
+.dropdown .valid-tag:hover {
+    background: #E84A5F;
+  }
+
+.dropdown .add-tag:active {
+  background: #3b90a8;
+}
+.dropdown .add-tag:focus {
+  outline: none;
+}
+.dropdown .dropdown-menu {
+  display: block;
+  position: absolute;
+  top: 34px;
+  left: 0;
+  width: auto;
+  height: 300px;
+  overflow: auto;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  box-shadow: 2px 2px 3px rgba(17, 17, 17, 0.2);
+  display: none;
+}
+.dropdown .dropdown-menu li {
+  width: 100%;
+  float: left;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 10px;
+  border-bottom: 1px solid #dbdbdb;
+}
+.dropdown .dropdown-menu li:hover {
+  cursor: pointer;
+  background: #8cc6d7;
+}
+.dropdown .dropdown-menu li.added {
+  background: #d7ebf1;
+  cursor: default;
+}
+.dropdown.open .dropdown-menu {
+  display: block;
+}
+.dropdown.open .add-tag {
+  background: #3b90a8;
+  color: #fff;
+}

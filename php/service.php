@@ -10,6 +10,7 @@ const PATH = "../media/autre/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
 const PATH_DATABASE_TAGS = "../database/tags.json";
+const PATH_DATABASE_ADD_TAG = "../database/add_tag.json";
 const PAGINATION = 20;
 const TITLE = "MyWebSite";
 
@@ -179,9 +180,33 @@ function createDisplay($pathConst, $path){
     $path_array = explode('/',$path);
     $name = end($path_array);
 
+    $tagsOfName = getAllTagByFolder($name);
+    $allTags = getAllTagsName();
+    $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
     echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+    echo '<div class="tag-container">
+    <h4>Tags</h4>
+    <div class="dropdown">
+      <span class="add-tag">Add</span>
+      <span class="modify-tag">Modify</span>
+      <span class="valid-tag">Valid</span>
+      <ul class="dropdown-menu">';
+      foreach($allTags as $tag){
+          if(in_array($tag,$tagsOfName) == true){
+        echo "<li class='added'>".$tag."</li>";
+          }else{
+        echo "<li>".$tag."</li>";
+          }
+        }
+      echo "</ul> </div><br>
+    <div class='tag-area'>";
+    foreach($tagsOfName as $tag){
+        echo "<div class='tag'>".$tag."<span class='remove'>×</span></div>";
+    }
+     echo "</div></div>";
+
     $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$pathConst."'";
-    echo '<h2><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
+    echo '<h2 id="download-title"><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
 
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
@@ -321,6 +346,17 @@ function getDataOfCompositeTag($search, $result){
     foreach($tagsName as $tag){
         if(array_key_exists($tag,$data) && strpos($tag, $search) !== false) {
             array_push($result,$data[$tag]);
+        }
+    }
+    return $result;
+}
+
+function getAllTagByFolder($name){
+    $tagsData = getAllTags();
+    $result = array();
+    foreach($tagsData as $tagName => $data){
+        if(in_array($name,$data) == true){
+            array_push($result, $tagName);
         }
     }
     return $result;
