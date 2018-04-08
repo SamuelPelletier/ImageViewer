@@ -13,6 +13,7 @@ const PATH_DATABASE_TAGS = "../database/tags.json";
 const PATH_DATABASE_ADD_TAG = "../database/add_tag.json";
 const PAGINATION = 20;
 const TITLE = "MyWebSite";
+const EMAIL = "MyWebSite@gmail.com";
 
 
 //---------- Checker -----------
@@ -103,6 +104,7 @@ function home_page_about()
     echo "<h1>About</h1><div class='row text-center text-lg-left about'>";
     echo '<h2>Hello World !</h2>';
     echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
+    echo '<div><a>You can contact us at </a><span class="email">'.EMAIL.'</span></div>';
     echo '<div id="list-tag"><h2>List of tags</h2><ul class="list" >';
     $tagNames = getAllTags();
     foreach($tagNames as $tagName => $data){
