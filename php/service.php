@@ -249,8 +249,7 @@ function search($path, $allFolders, $name){
     if($name == ''){
         return $allFolders;
     }
-    $partSearch = convertInWord($name);;
-    $partSearch = array_diff($partSearch, getAllTagsName());
+    $partSearch = convertInWord($name);
 
     foreach($partSearch as $part){
         $temp = array();
@@ -272,8 +271,8 @@ function search($path, $allFolders, $name){
 
     $tagData = getDataOfTag($name);
     if(count($tagData) > 0 && count($result) > 0 ){
-        $result = array_intersect($result, $tagData);
-    }else if($result > 0 && $tagData === 0){
+       $result = array_unique(array_merge($result, $tagData));
+    }else if(count($result) > 0 && count($tagData) == 0){
         $result = $result;
     }else if(count($result) == 0){
         $result = $tagData;

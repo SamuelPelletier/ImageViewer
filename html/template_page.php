@@ -19,12 +19,6 @@
                 <a href="/all">All</a>
             </li>
             <li>
-                <a href="/import">Import</a>
-            </li>
-            <li>
-                <a href="/upload">Upload</a>
-            </li>
-            <li>
                 <a href="/about">About</a>
             </li>
         </ul>

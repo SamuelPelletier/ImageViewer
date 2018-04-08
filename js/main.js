@@ -57,14 +57,15 @@ function search(){
     if('number' in param){
         delete param['number'];
     }
+    var pathname = window.location.pathname == "/about" ? "/" : window.location.pathname;
     if('search' in param || Object.keys(param).length > 0){
         if(param['page'] > 1){
             param['page'] = 1
         }
         param['search'] = "'"+$("#search").val()+"'";
-        newUrl = window.location.origin + window.location.pathname + '?' + Object.keys(param).map(key => key + '=' + param[key]).join('&')
+        newUrl = window.location.origin + pathname + '?' + Object.keys(param).map(key => key + '=' + param[key]).join('&')
     }else{
-        newUrl = window.location.origin + window.location.pathname +'?'+"search='"+$("#search").val()+"'"
+        newUrl = window.location.origin + pathname +'?'+"search='"+$("#search").val()+"'"
     }
     window.location = newUrl;
 }

@@ -30,8 +30,12 @@ if(isset($_GET["tags"]) && isset($_GET["name"])){
 	
 	$json[$name] = $tags;
 	$json = json_encode($json);
-	file_put_contents(PATH_DATABASE_ADD_TAG,$json);
-	echo "<script>window.close();</script>";
+	$result = file_put_contents(PATH_DATABASE_ADD_TAG,$json);
+	if($result != false){
+		echo "<script>window.close();</script>";
+	}else{
+		header('Location: ../html/error404.html');
+	}
 }else{
 	header('Location: ../html/error404.html');
 }
