@@ -259,6 +259,26 @@ li:last-child .page {
     background-image:url(../assets/play.png);
 }
 
+.time{
+    position: absolute;
+    top:-100%;
+    left: 45%;
+}
+
+.input-time{
+    width: 28px;
+    height: 36px;
+    border-radius:100%;
+    border: transparent;
+    background: transparent;
+    text-align: center;  
+}
+
+.time-second{
+    position: relative;
+    left:-5px;
+}
+
 .pause{
     background-image:url(../assets/pause.png);
 }
@@ -913,3 +933,45 @@ h4 {
   background: #3b90a8;
   color: #fff;
 }
+
+#list-tag {
+width: 95%;
+position: absolute;
+right: 0px;
+left: 0px;
+margin: auto;
+background: #6f6d6d;
+padding: 1em;
+border: 1px solid #6f6d6d;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.05);
+border-radius: 3px;
+overflow: hidden;
+}
+.list-wrap {
+margin-top: 0.4em;
+overflow-y: auto;
+overflow-x: hidden;
+}
+.list {
+padding-left: 0px;
+-moz-column-count: 7;
+-moz-column-gap: 20px;
+-webkit-column-count: 7;
+-webkit-column-gap: 20px;
+column-count: 7;
+column-gap: 20px;
+}
+
+.list-item {
+font-weight: 600;
+font-size: 15px;
+padding: 0.5em 0.8em;
+overflow: hidden;
+}
+
+.item-list-subtext {
+font-size: 85%;
+color: white;
+}
+  
+    

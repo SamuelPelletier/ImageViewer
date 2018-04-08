@@ -116,7 +116,7 @@ function createPagination(pagination, nbrItems, page) {
 
 function viewer(path) {
     toggleFullscreen()
-    var intervalID;
+    var intervalID = undefined;
     var name = path.split("/").pop();
     var onlyPath = path.substring(0, path.length - name.length)
     getImageList()
@@ -129,8 +129,8 @@ function viewer(path) {
     $(".cross").click(function () {
         $(".pause").hide()
         $(".start").show()
-        clearInterval(intervalID); // useless ?
-        intervalID = undefined
+        clearInterval(intervalID);
+        intervalID = undefined;
         $(".viewer").fadeOut(function () {
             $(".viewer").remove()
             $("body").css("overflow", "visible")
@@ -169,19 +169,51 @@ function viewer(path) {
             intervalID = setInterval(function () {
                 var predName = imageList[getNext(name)]
                 $(".imgViewer").fadeTo(1000,0.1);
-                intervalID = setTimeout(function () {
+                setTimeout(function () {
                     $(".imgViewer").attr("src", onlyPath.concat(predName)).fadeTo(1000,1)
                 }, 1000);
                 name = predName
-            }, 5000);
+            },  $(".input-time").val()*1000);
         }
     })
+
+    $(".start").hover(function () {
+        if($(".time").length == 0){
+            $(".start").after("<div class='time'></div>")
+            $(".time").hide()
+            $(".time").append("<input class='input-time' min='2' max='99' value='5'></input>")
+            $(".time").append("<label class='time-second'>s</label>")
+        }
+        $(".time").fadeIn("slow")
+
+        $(".time").hover(function () {
+            $(".time-second").remove()
+            $(".input-time").prop('type', 'number');
+            $(".input-time").css('text-align','right')
+            $(".input-time").css('width','36px')
+        }, function(){
+            if($(".time-second").length == 0){
+                $(".time").append("<label class='time-second'>s</label>")
+            }
+            if($(".input-time").val() == ''){
+                $(".input-time").val(5)
+            }
+            $(".input-time").css('width','28px')
+            $(".input-time").css('text-align','center')
+            $(".input-time").prop('type', 'text');
+            $(".input-time").css('text-align','center')
+            $(".time").fadeOut("slow")
+        })
+        
+    })
+
+    
 
     $(".pause").click(function () {
         $(".pause").hide()
         $(".start").show()
-        clearInterval(intervalID); // useless ?
-        intervalID = undefined
+        clearInterval(intervalID);
+        intervalID = undefined;
     })
 
     $(".nextImage").click(function () {
@@ -217,7 +249,7 @@ function viewer(path) {
     })
 
     $("img").mouseout(function (e) {
-        if (e.relatedTarget && !["control", "start", "pause", "back", "next", "full-back", "full-next"].includes(e.relatedTarget.className)) {
+        if (e.relatedTarget && !["control", "start", "pause", "back", "next", "full-back", "full-next","time","input-time","time-second"].includes(e.relatedTarget.className)) {
             if (ready == true) {
                 ready = false
                 $(".control").fadeOut("slow", function () {

@@ -3,4 +3,4 @@ node_modules
 /media/autre/
 /import/
 .idea/
-/database/
+/database/*
