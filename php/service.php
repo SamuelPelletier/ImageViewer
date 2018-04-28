@@ -1,20 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Samuel
- * Date: 17/11/2017
- * Time: 21:33
- */
-
-const PATH = "../media/autre/";
-const PATH_IMPORT = "../import/";
-const PATH_ALL = "../media/all/";
-const PATH_DATABASE_TAGS = "../database/tags.json";
-const PATH_DATABASE_ADD_TAG = "../database/add_tag.json";
-const PAGINATION = 20;
-const TITLE = "MyWebSite";
-const EMAIL = "MyWebSite@gmail.com";
-
+include("$_SERVER[DOCUMENT_ROOT]/php/config.php");
 
 //---------- Checker -----------
 
@@ -191,6 +176,7 @@ function createDisplay($pathConst, $path){
       <span class="add-tag">Add</span>
       <span class="modify-tag">Modify</span>
       <span class="valid-tag">Valid</span>
+      <span class="help-us">Help us by adding tags !</span>
       <ul class="dropdown-menu">';
       foreach($allTags as $tag){
           if(in_array($tag,$tagsOfName) == true){

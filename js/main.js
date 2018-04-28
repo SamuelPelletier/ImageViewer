@@ -380,6 +380,11 @@ function manageTag(){
     $.each($('.tag'),function(key,value){
         listTag.push($(value).text().slice(0,-1))
     })
+    
+    $('.tag').click(function(){
+        $("#search").val($(this).text().slice(0,-1))
+        search()
+    })
 
     $('.add-tag').hide()
     $('.valid-tag').hide()
@@ -406,6 +411,7 @@ function manageTag(){
                 }
             })
             window.open(path)
+            $(".help-us").html("Thank you !")
         }
     });
         // Dropdown
@@ -421,9 +427,9 @@ function manageTag(){
     // Add Tags
     $(".dropdown").on("click", ".dropdown-menu > li", function() {
         if ( !$(this).hasClass("added") ) {
-        $(this).addClass("added");
-        listTag.push($(this).text())
-        $(".tag-area").append('<div class="tag">' + $(this).text() + '<span class="remove">×</span></div>');
+            $(this).addClass("added");
+            listTag.push($(this).text())
+            $(".tag-area").append('<div class="tag">' + $(this).text() + '<span class="remove">×</span></div>');
         }
     });
 
