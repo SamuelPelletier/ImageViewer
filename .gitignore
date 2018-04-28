@@ -3,5 +3,5 @@ node_modules
 /media/autre/
 /import/
 /database/
-/php/config.php
+/php/config.prod.php
 .idea/
