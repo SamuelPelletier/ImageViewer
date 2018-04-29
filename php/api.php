@@ -30,7 +30,6 @@ function launch(){
     $name = $json['title']['english'];
     $nb_image = $json['num_pages'];
     $media_id = $json['media_id'];
-    $ext = $json['images']['pages'][0]["t"] == "j" ? "jpg" : "png";
     $tags = array();
     foreach($json['tags'] as $tag){
         if($tag['type'] == 'tag'){
@@ -46,6 +45,7 @@ function launch(){
             return;
         }
         for($i = 1; $i <= $nb_image; $i++){
+            $ext = $json['images']['pages'][$i-1]["t"] == "j" ? "jpg" : "png";
             copy(API_IMG.$media_id.'/'.$i.'.'.$ext, $newPath.str_pad($i, 2, "0", STR_PAD_LEFT).'.'.$ext);
         }
     }
