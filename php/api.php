@@ -48,18 +48,19 @@ function launch(){
         for($i = 1; $i <= $nb_image; $i++){
             copy(API_IMG.$media_id.'/'.$i.'.'.$ext, $newPath.str_pad($i, 2, "0", STR_PAD_LEFT).'.'.$ext);
         }
+    }
 
-        $str = file_get_contents(PATH_DATABASE_TAGS);
-        $listTag = json_decode($str, true);
-        foreach($tags as $tag){
-            if(!isset($listTag[$tag])){
-                $listTag[$tag] = array();
-            }
+    $str = file_get_contents(PATH_DATABASE_TAGS);
+    $listTag = json_decode($str, true);
+    foreach($tags as $tag){
+        if(!isset($listTag[$tag])){
+            $listTag[$tag] = array();
+        }
+        if(array_search($name, $listTag[$tag]) === false){
             array_push($listTag[$tag],$name);
         }
-        $listTag = json_encode($listTag);
-        file_put_contents(PATH_DATABASE_TAGS,$listTag);
-    }else{
-        return;
     }
+    
+    $listTag = json_encode($listTag);
+    file_put_contents(PATH_DATABASE_TAGS,$listTag);
 }

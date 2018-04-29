@@ -38,7 +38,7 @@ $file = $_GET["path"].$name.'/';
 	
 	  // On peut ensuite, comme dans le tuto de DHKold, proposer le téléchargement.
 	  header('Content-Transfer-Encoding: binary'); //Transfert en binaire (fichier).
-	  header('Content-Disposition: attachment; filename='.$name.".zip"); //Nom du fichier.
+	  header('Content-Disposition: attachment; filename="'.$name.'"'.".zip"); //Nom du fichier.
 	  header('Content-Length: '.filesize($name.'.zip')); //Taille du fichier.
 	  
 			$test = readfile($name.'.zip');
