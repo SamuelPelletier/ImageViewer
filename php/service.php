@@ -120,6 +120,7 @@ function displayImagesImport($path)
 // --------- Create ----------
 
 function createContent($pageName, $pathConst){
+
     $page = check_page();
     $allFolders = scandirByModifiedDate($pathConst);
     $parts = parse_url($_SERVER['HTTP_REFERER']);
@@ -131,20 +132,17 @@ function createContent($pageName, $pathConst){
     }
 
     $total = sizeof($searchFolders);
-    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION);
+    $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION, PAGINATION);
     $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
 
     if($size > 0){
         echo '<script>createPagination(' . PAGINATION . ',' . $total. ',' . $page . ')</script>';
         for ($i = 0; $i < $size; $i++) {
-            if ($i % 4 == 0) {
-                echo "\n";
-            }
             $firstImage = array_values(array_diff(scandir($pathConst . "/" . $searchFolders[$i]), array(".", "..")))[0];
-            $lien = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            $link = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="'.$pageName.'?number=' . $lien . '" class="d-block mb-4 h-100 img-cell">
+                        <a href="'.$pageName.'?number=' . $link . '" class="d-block mb-4 h-100 img-cell">
                             <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
                             <img class="img-fluid img-thumbnail" src="' . $pathConst . $searchFolders[$i]. "/" . $firstImage . '" alt="">
                         </a>
@@ -219,14 +217,22 @@ function scandirByModifiedDate($dir)
     $page = check_page();
     $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
     $page--;
-    $files = array();
-    foreach (scandir($dir) as $key => $file) {
-        if (in_array($file, $ignored)) continue;
-        $files[$file] = filemtime($dir . '/' . $file);
-    }
+    // (Date last modif + 1 day) - date now
+    $diff_date = (filemtime(PATH_CACHE_RESULT) + 86400) - time();
+    $json = file_get_contents(PATH_CACHE_RESULT);
+    $files = json_decode($json,true);
 
-    arsort($files);
-    $files = array_keys($files);
+    // Last modif after one day
+    if($diff_date < 0 || count($files) == 0){
+        $files = array();
+        foreach (scandir($dir) as $key => $file) {
+            if (in_array($file, $ignored)) continue;
+            $files[$file] = filemtime($dir . '/' . $file);
+        }
+        arsort($files);
+        $files = array_keys($files);
+        file_put_contents(PATH_CACHE_RESULT,json_encode($files));
+    }
 
     return ($files) ? $files : false;
 }
@@ -265,6 +271,7 @@ function search($path, $allFolders, $name){
     }else if(count($result) == 0){
         $result = $tagData;
     }
+
     return $result;
 }
 
