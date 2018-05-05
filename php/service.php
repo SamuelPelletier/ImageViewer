@@ -217,9 +217,14 @@ function scandirByModifiedDate($dir)
     $page = check_page();
     $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
     $page--;
+    if($dir == PATH_ALL){
+        $cache = PATH_CACHE_ALL;
+    }else if($dir == PATH){
+        $cache = PATH_CACHE_BEST;
+    }
     // (Date last modif + 1 day) - date now
-    $diff_date = (filemtime(PATH_CACHE_RESULT) + 86400) - time();
-    $json = file_get_contents(PATH_CACHE_RESULT);
+    $diff_date = (filemtime($cache) + 86400) - time();
+    $json = file_get_contents($cache);
     $files = json_decode($json,true);
 
     // Last modif after one day
@@ -231,7 +236,7 @@ function scandirByModifiedDate($dir)
         }
         arsort($files);
         $files = array_keys($files);
-        file_put_contents(PATH_CACHE_RESULT,json_encode($files));
+        file_put_contents($cache,json_encode($files));
     }
 
     return ($files) ? $files : false;
