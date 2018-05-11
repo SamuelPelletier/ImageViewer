@@ -22,12 +22,12 @@ function launch(){
     if(isset($_GET["id"])){
         $id = $_GET["id"];
     }else{
-        $str = file_get_contents(PATH_API_MEMORY);
+        $str = file_get_contents(__DIR__ .'/'.PATH_API_MEMORY);
         $data = json_decode($str, true);
         $id = $data['id'];
         $data['id']++;
         $data = json_encode($data, true);
-        file_put_contents(PATH_API_MEMORY,$data);
+        file_put_contents(__DIR__ .'/'.PATH_API_MEMORY,$data);
     }
     
     $data = CallAPI("GET",API_URL.$id);
@@ -42,7 +42,7 @@ function launch(){
         }
     }
 
-    $newPath = PATH_ALL.$name.'/';
+    $newPath = __DIR__ .'/'.PATH_ALL.$name.'/';
 
     if (!file_exists($newPath)) {
         $result = mkdir($newPath, 0777, true);
@@ -55,7 +55,7 @@ function launch(){
         }
     }
 
-    $str = file_get_contents(PATH_DATABASE_TAGS);
+    $str = file_get_contents(__DIR__ .'/'.PATH_DATABASE_TAGS);
     $listTag = json_decode($str, true);
     foreach($tags as $tag){
         if(!isset($listTag[$tag])){
@@ -67,5 +67,5 @@ function launch(){
     }
     
     $listTag = json_encode($listTag);
-    file_put_contents(PATH_DATABASE_TAGS,$listTag);
+    file_put_contents(__DIR__ .'/'.PATH_DATABASE_TAGS,$listTag);
 }
