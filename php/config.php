@@ -7,6 +7,7 @@ const PATH_DATABASE_TAGS = "../database/tags.json";
 const PATH_DATABASE_ADD_TAG = "../database/add_tag.json";
 const PATH_CACHE_ALL = "../database/cache_all.json";
 const PATH_CACHE_BEST = "../database/cache_best.json";
+const PATH_API_MEMORY = "../database/api_memory.json";
 const PAGINATION = 20;
 const TITLE = "MyWebSite";
 const EMAIL = "exemple@gmail.com";

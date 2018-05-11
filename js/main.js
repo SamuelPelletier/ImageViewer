@@ -57,7 +57,8 @@ function search(){
     if('number' in param){
         delete param['number'];
     }
-    var pathname = window.location.pathname == "/about" ? "/" : window.location.pathname;
+    var pathname = window.location.pathname == "/about" ||  window.location.pathname == "/about/" ? "/all" : window.location.pathname;
+    console.log(pathname);
     if('search' in param || Object.keys(param).length > 0){
         if(param['page'] > 1){
             param['page'] = 1

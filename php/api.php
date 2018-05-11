@@ -1,5 +1,5 @@
 <?php
-include "./service.php";
+include(__DIR__ ."/service.php");
 
 launch();
 
@@ -22,9 +22,14 @@ function launch(){
     if(isset($_GET["id"])){
         $id = $_GET["id"];
     }else{
-        return;
+        $str = file_get_contents(PATH_API_MEMORY);
+        $data = json_decode($str, true);
+        $id = $data['id'];
+        $data['id']++;
+        $data = json_encode($data, true);
+        file_put_contents(PATH_API_MEMORY,$data);
     }
-
+    
     $data = CallAPI("GET",API_URL.$id);
     $json = json_decode($data, true);
     $name = $json['title']['english'];

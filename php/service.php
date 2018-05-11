@@ -1,5 +1,5 @@
 <?php
-include("$_SERVER[DOCUMENT_ROOT]/php/config.php");
+include(__DIR__ ."/config.php");
 
 //---------- Checker -----------
 
