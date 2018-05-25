@@ -33,6 +33,12 @@ function launch(){
     $data = CallAPI("GET",API_URL.$id);
     $json = json_decode($data, true);
     $name = $json['title']['english'];
+    $name = str_replace('/','',$name);
+    $name = str_replace('?','⸮',$name);
+    $name = str_replace('%','‰',$name);
+    $name = str_replace('#','♯',$name);
+    $name = str_replace('#','♯',$name);
+    $name = str_replace('"',"'",$name);
     $nb_image = $json['num_pages'];
     $media_id = $json['media_id'];
     $tags = array();

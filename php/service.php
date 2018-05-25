@@ -134,16 +134,16 @@ function createContent($pageName, $pathConst){
     $total = sizeof($searchFolders);
     $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION, PAGINATION);
     $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
-
     if($size > 0){
         echo '<script>createPagination(' . PAGINATION . ',' . $total. ',' . $page . ')</script>';
         for ($i = 0; $i < $size; $i++) {
             $firstImage = array_values(array_diff(scandir($pathConst . "/" . $searchFolders[$i]), array(".", "..")))[0];
             $link = sizeof($allFolders)-array_search($searchFolders[$i], $allFolders, true);
+            $title = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$searchFolders[$i])));
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
                         <a href="'.$pageName.'?number=' . $link . '" class="d-block mb-4 h-100 img-cell">
-                            <h5 class="img-name" title="' . $searchFolders[$i] . '">' . $searchFolders[$i] . '</h5>
+                            <h5 class="img-name" title="' . $title . '">' . $title . '</h5>
                             <img class="img-fluid img-thumbnail" src="' . $pathConst . $searchFolders[$i]. "/" . $firstImage . '" alt="">
                         </a>
                     </div>';
@@ -167,7 +167,7 @@ function createDisplay($pathConst, $path){
     $tagsOfName = getAllTagByFolder($name);
     $allTags = getAllTagsName();
     $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
-    echo "<h1>".$name."</h1><div class=\"row text-center text-lg-left\">";
+    echo "<h1>".str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)))."</h1><div class=\"row text-center text-lg-left\">";
     echo '<div class="tag-container">
     <h4>Tags</h4>
     <div class="dropdown">
@@ -201,7 +201,7 @@ function createDisplay($pathConst, $path){
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
-                        <img class="img-fluid img-thumbnail" src="' . $path . '/' . $tabs[$i] . '" alt="">
+                        <img class="img-fluid img-thumbnail" src="' . $path . '/' .  $tabs[$i] . '" alt="">
                     </a>
                 </div>';
     }
