@@ -70,7 +70,7 @@ function launch(){
     $sm = imagecreatetruecolor($size['sm']['w'],$size['sm']['h']);
     imagecopyresampled($sm, $image, 0, 0, 0, 0, $size['sm']['w'], $size['sm']['h'], $w, $h);
 
-    for ($x=1; $x <=40; $x++){
+    for ($x=1; $x <=50; $x++){
         imagefilter($sm, IMG_FILTER_GAUSSIAN_BLUR, 999);
     } 
 
@@ -92,13 +92,13 @@ function launch(){
     /* Scale result back to original size */
     imagecopyresampled($image, $md, 0, 0, 0, 0, $w, $h, $size['md']['w'], $size['md']['h']);
 
-    imagejpeg($image,__DIR__.'/../facebook/'.$title.'.jpg');
+    imagejpeg($image,__DIR__.'/facebook.jpg');
     imagedestroy($image);
 
     $response = $fb->post(
         '/'.$pageId.'/photos',
         array (
-          'url' => str_replace(' ','%20', URL_FACEBOOK.$title.'.jpg'),
+          'url' => URL_FACEBOOK_IMG,
           'caption' => 'New '.FACEBOOK_NEW.' : '.$title."\n".'Link : '.FACEBOOK_LINK. (count($files) - $key),
         ),
         $accessToken
