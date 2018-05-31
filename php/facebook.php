@@ -34,8 +34,8 @@ function launch(){
     $fb->setDefaultAccessToken($accessToken);
 
     $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
-    $dir = PATH_ALL;
-    $cache = PATH_CACHE_ALL;
+    $dir = __DIR__."/".PATH_ALL;
+    $cache = __DIR__."/".PATH_CACHE_ALL;
     $json = file_get_contents($cache);
     $files = json_decode($json,true);
     $files = array();
@@ -54,7 +54,7 @@ function launch(){
     }
 
     $title = $files[$key];
-    $file = PATH_ALL.$title.'/01.jpg';
+    $file = __DIR__."/".PATH_ALL.$title.'/01.jpg';
 
     $image = imagecreatefromjpeg($file);
 
