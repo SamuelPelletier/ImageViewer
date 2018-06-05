@@ -1,6 +1,5 @@
 <?php
 include(__DIR__ ."/service.php");
-require_once __DIR__ . '/../vendor/autoload.php'; // change path as needed
 
 launch();
 

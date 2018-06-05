@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/../vendor/autoload.php';
+
 const PATH = "../media/autre/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
