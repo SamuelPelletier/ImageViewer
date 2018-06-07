@@ -48,6 +48,23 @@ $(document).ready(function () {
             }
         });
         flagLoad = true;
+
+        var img = document.getElementsByClassName("img-thumbnail");
+        for (var i = 0; i < img.length; i++) {
+            if (img[i].height > 1000) {
+                // Greater than 1000px in height
+                img[i].className = img[i].className + " big-thumbnail";
+            }
+        }
+
+        $("#search").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $(".list li").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+
+        reloadListPreference();
     });
 
 })
@@ -58,7 +75,6 @@ function search(){
         delete param['number'];
     }
     var pathname = window.location.pathname == "/about" ||  window.location.pathname == "/about/" ? "/all" : window.location.pathname;
-    console.log(pathname);
     if('search' in param || Object.keys(param).length > 0){
         if(param['page'] > 1){
             param['page'] = 1
@@ -382,7 +398,7 @@ function manageTag(){
         listTag.push($(value).text().slice(0,-1))
     })
     
-    $('.tag').click(function(){
+    $('.tag, .about-tag').click(function(){
         $("#search").val($(this).text().slice(0,-1))
         search()
     })
@@ -443,4 +459,61 @@ function manageTag(){
         $(".dropdown-menu > li:contains('" + objectText + "')").removeClass("added");
     });
   
+}
+
+function setPreferenceCookie(cvalue) {
+    $.cookie.json = true;
+    $.cookie("PreferenceList", cvalue, { expires : 365, path: '/',domain: location.hostname});
+}
+
+function getPreferenceCookie() {
+    $.cookie.json = true;
+    return $.cookie("PreferenceList")
+}
+
+function addPreference(id, name){
+    var pref = {}
+    if(getPreferenceCookie() !== undefined){
+        pref = getPreferenceCookie()
+    }
+    pref[id] = name;
+    setPreferenceCookie(pref)
+    reloadListPreference();
+    $(".pulse-div-add").hide();
+    $(".pulse-div-remove").show();
+}
+
+function removePreference(id){
+    var pref = {}
+    if(getPreferenceCookie() !== undefined){
+        pref = getPreferenceCookie()
+    }
+    delete pref[id]
+    setPreferenceCookie(pref)
+    reloadListPreference();
+    $(".pulse-div-remove").hide();
+    $(".pulse-div-add").show();
+}
+
+function choosePreference(id){
+    newUrl = window.location.origin + "/all" +'?'+"number="+id
+    window.location = newUrl;
+}
+
+function reloadListPreference(){
+    var dropdown = $(".dropdown-preference-select");
+    dropdown.empty()
+    dropdown.append('<option value="" disabled selected>Your preference..</option>');
+    data = getPreferenceCookie();
+    if(data === undefined){
+        data = {}
+    }
+    $.each(data, function(index, value){
+        dropdown.append($("<option />").val(index).text(value));
+    });
+    if($_GET()['number'] in data){
+        $(".pulse-div-add").hide()
+    }else{
+        $(".pulse-div-remove").hide()
+    }
 }

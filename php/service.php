@@ -90,10 +90,11 @@ function home_page_about()
     echo '<h2>Hello World !</h2>';
     echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
     echo '<div><a>You can contact us at </a><span class="email">'.EMAIL.'</span></div>';
+    echo '<a style="font-weight:bold;">Use the search field ↑ for research in the tag list</a>';
     echo '<div id="list-tag"><h2>List of tags</h2><ul class="list" >';
     $tagNames = getAllTags();
     foreach($tagNames as $tagName => $data){
-        echo '<li class="list-item" ><a class="list-item-link">'.$tagName.' ( '.count($data).' )</a></li>';
+        echo '<li class="list-item" ><a class="list-item-link"><a class="about-tag">'.$tagName.' </a>( '.count($data).' )</a></li>';
     }
     echo "</ul></div></div>";
 }
@@ -167,7 +168,8 @@ function createDisplay($pathConst, $path){
     $tagsOfName = getAllTagByFolder($name);
     $allTags = getAllTagsName();
     $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
-    echo "<h1>".str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)))."</h1><div class=\"row text-center text-lg-left\">";
+    $clearName = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)));
+    echo "<h1>".$clearName."</h1><div class=\"row text-center text-lg-left\">";
     echo '<div class="tag-container">
     <h4>Tags</h4>
     <div class="dropdown">
@@ -190,8 +192,16 @@ function createDisplay($pathConst, $path){
     }
      echo "</div></div>";
 
+    $parts = parse_url($_SERVER['HTTP_REFERER']);
+    parse_str($parts['query'], $url );
+    
+    $id = $pathConst == PATH_ALL ? $url["number"] : getId($name);
+    echo '<div class="pulse-div-add"><button class="pulse" onclick="addPreference('.$id.','."'".$clearName."'".')">Add as preference</button></div>';
+    echo '<div class="pulse-div-remove"><button class="pulse" onclick="removePreference('.$id.')">Remove as preference</button></div>';
+
     $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$pathConst."'";
     echo '<h2 id="download-title"><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
+    
 
 
     for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
@@ -270,7 +280,7 @@ function search($path, $allFolders, $name){
 
     $tagData = getDataOfTag($name);
     if(count($tagData) > 0 && count($result) > 0 ){
-       $result = array_unique(array_merge($result, $tagData));
+       $result = array_unique(array_merge($tagData,$result));
     }else if(count($result) > 0 && count($tagData) == 0){
         $result = $result;
     }else if(count($result) == 0){
@@ -335,7 +345,7 @@ function getDataOfTag($search){
     }else{
         $result = call_user_func_array('array_intersect',$result);
     }
-    return $result;
+    return array_reverse($result);
 }
 
 function getDataOfCompositeTag($search, $result){
@@ -358,4 +368,16 @@ function getAllTagByFolder($name){
         }
     }
     return $result;
+}
+
+function getId($name){
+    $allFolders = scandirByModifiedDate(PATH_ALL);
+    $folderId;
+    foreach($allFolders as $id => $folder){
+        if($name === $folder){
+            $folderId = $id;
+            break;
+        }
+    }
+    return sizeof($allFolders) - $folderId;
 }

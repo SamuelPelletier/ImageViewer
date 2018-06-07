@@ -26,10 +26,17 @@
     <div id="page-content-wrapper">
         <div class="container-fluid">
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
-            <input type="text" name="search" id="search"><button class="searchButton" onclick="search()">Search</button>
-                <?php
+            <input type="text" name="search" id="search" placeholder="Tags or name"><button class="searchButton" onclick="search()">Search</button>
+            <section class="container-preference">
+                <div class="dropdown-preference">
+                    <select class="dropdown-preference-select" onchange='choosePreference(this.value)'>
+                        <option value="" disabled selected>Your preference..</option>
+                    </select>
+                </div>
+            </section>
+            <?php
                 check_routing();
-                ?>
+            ?>
         </div>
     </div>
 
@@ -42,7 +49,6 @@
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
-            console.log(sessionStorage.getItem("menu_toggled"))
             if(sessionStorage.getItem("menu_toggled") == "close"){
                 sessionStorage.setItem("menu_toggled","open")
             }else{
