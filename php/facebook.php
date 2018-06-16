@@ -19,6 +19,9 @@ function CallAPI($method, $url)
 }
 
 function launch(){
+    //switch tags.json with tags_temp.json
+    copy(PATH_DATABASE_TAGS_TEMP, PATH_DATABASE_TAGS);
+    
     $appId = FACEBOOK_APP_ID;
     $appSecret = FACEBOOK_APP_SECRET;
     $pageId = FACEBOOK_PAGE_ID;
@@ -101,5 +104,5 @@ function launch(){
           'caption' => 'New '.FACEBOOK_NEW.' : '.$title."\n".'Link : '.FACEBOOK_LINK. (count($files) - $key),
         ),
         $accessToken
-      );
+    );
 }

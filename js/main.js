@@ -463,7 +463,7 @@ function manageTag(){
 
 function setPreferenceCookie(cvalue) {
     $.cookie.json = true;
-    $.cookie("PreferenceList", cvalue, { expires : 365, path: '/',domain: location.hostname});
+    $.cookie("PreferenceList", cvalue, { expires : 365, path: '/'});
 }
 
 function getPreferenceCookie() {

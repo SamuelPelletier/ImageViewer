@@ -7,6 +7,7 @@ const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";
 const URL_FACEBOOK_IMG = "http://mywbebsite.com/php/facebook.jpg";
 const PATH_DATABASE_TAGS = "../database/tags.json";
+const PATH_DATABASE_TAGS_TEMP = "../database/tags_temp.json";
 const PATH_DATABASE_ADD_TAG = "../database/add_tag.json";
 const PATH_CACHE_ALL = "../database/cache_all.json";
 const PATH_CACHE_BEST = "../database/cache_best.json";

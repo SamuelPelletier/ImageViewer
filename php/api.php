@@ -65,7 +65,7 @@ function launch(){
         }
     }
 
-    $str = file_get_contents(__DIR__ .'/'.PATH_DATABASE_TAGS);
+    $str = file_get_contents(__DIR__ .'/'.PATH_DATABASE_TAGS_TEMP);
     $listTag = json_decode($str, true);
     foreach($tags as $tag){
         if(!isset($listTag[$tag])){
@@ -77,5 +77,5 @@ function launch(){
     }
     
     $listTag = json_encode($listTag);
-    file_put_contents(__DIR__ .'/'.PATH_DATABASE_TAGS,$listTag);
+    file_put_contents(__DIR__ .'/'.PATH_DATABASE_TAGS_TEMP,$listTag);
 }
