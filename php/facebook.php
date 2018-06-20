@@ -19,6 +19,9 @@ function CallAPI($method, $url)
 }
 
 function launch(){
+    //switch tags.json with tags_temp.json
+    copy(__DIR__ ."/".PATH_DATABASE_TAGS_TEMP, __DIR__ ."/".PATH_DATABASE_TAGS);
+
     $appId = FACEBOOK_APP_ID;
     $appSecret = FACEBOOK_APP_SECRET;
     $pageId = FACEBOOK_PAGE_ID;
@@ -102,8 +105,4 @@ function launch(){
         ),
         $accessToken
     );
-
-    //switch tags.json with tags_temp.json
-    copy(PATH_DATABASE_TAGS_TEMP, PATH_DATABASE_TAGS);
-    die;
 }
