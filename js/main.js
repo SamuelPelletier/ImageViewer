@@ -65,6 +65,19 @@ $(document).ready(function () {
           });
 
         reloadListPreference();
+
+        var tags = getHidenTagsCookie();
+        $.each($('.list-item'),function(){
+            if($.inArray( $(this).find('.about-tag').text().slice(0,-1),tags) != -1){
+                $(this).find('.show-tag').show();
+                $(this).find('.hide-tag').hide();
+                $(this).find('.hand').addClass('visible')
+            }else{
+                $(this).find('.show-tag').hide();
+                $(this).find('.hide-tag').show();
+                $(this).find('.hand').removeClass('visible')
+            }
+        })
     });
 
 })
@@ -516,4 +529,42 @@ function reloadListPreference(){
     }else{
         $(".pulse-div-remove").hide()
     }
+}
+
+function setHidenTagsCookie(cvalue) {
+    $.cookie.json = true;
+    $.cookie("HidenTags", cvalue, { expires : 365, path: '/'});
+}
+
+function getHidenTagsCookie() {
+    $.cookie.json = true;
+    return $.cookie("HidenTags")
+}
+
+function addHidenTags(name,myThis){
+    var tags = []
+    if(getHidenTagsCookie() !== undefined){
+        tags = getHidenTagsCookie()
+    }
+    tags.push(name);
+    setHidenTagsCookie(tags)
+    myThis.next().find('.hand').removeClass('visible');
+    myThis.hide();
+    myThis.next().show();
+    myThis.next().find('.hand').addClass('visible');
+}
+
+function removeHidenTags(name,myThis){
+    var tags = []
+    if(getHidenTagsCookie() !== undefined){
+        tags = getHidenTagsCookie()
+    }
+    tags = jQuery.grep(tags, function(value) {
+        return value != name;
+      });
+    setHidenTagsCookie(tags)
+    myThis.prev().find('.hand').addClass('visible');
+    myThis.hide();
+    myThis.prev().show();
+    myThis.prev().find('.hand').removeClass('visible');
 }
