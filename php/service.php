@@ -179,6 +179,7 @@ function createDisplay($pathConst, $path){
     $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
     $clearName = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)));
     echo "<h1>".$clearName."</h1><div class=\"row text-center text-lg-left\">";
+    /*
     echo '<div class="tag-container">
     <h4>Tags</h4>
     <div class="dropdown">
@@ -186,6 +187,11 @@ function createDisplay($pathConst, $path){
       <span class="modify-tag">Modify</span>
       <span class="valid-tag">Valid</span>
       <span class="help-us">Help us by adding tags !</span>
+      <ul class="dropdown-menu">';
+    */
+    echo '<div class="tag-container">
+    <h4>Tags</h4>
+    <div class="dropdown">
       <ul class="dropdown-menu">';
       foreach($allTags as $tag){
           if(in_array($tag,$tagsOfName) == true){

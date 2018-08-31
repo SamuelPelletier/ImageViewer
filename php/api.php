@@ -61,7 +61,7 @@ function launch(){
         }
         for($i = 1; $i <= $nb_image; $i++){
             $ext = $json['images']['pages'][$i-1]["t"] == "j" ? "jpg" : "png";
-            copy(API_IMG.$media_id.'/'.$i.'.'.$ext, $newPath.str_pad($i, 2, "0", STR_PAD_LEFT).'.'.$ext);
+            copy(API_IMG.$media_id.'/'.$i.'.'.$ext, $newPath.str_pad($i, 3, "0", STR_PAD_LEFT).'.'.$ext);
         }
     }
 

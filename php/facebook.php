@@ -50,13 +50,13 @@ function launch(){
     file_put_contents($cache,json_encode($files));
 
     foreach($files as $key => $file){
-        if(empty(array_intersect(getAllTagByFolder($file),PRIVATE_TAGS))){
+        if(empty(array_intersect(getAllTagByFolder($file),PRIVATE_TAGS)) && $key != 0 && $key != 1){
             break;
         }
     }
 
     $title = $files[$key];
-    $file = __DIR__."/".PATH_ALL.$title.'/01.jpg';
+    $file = __DIR__."/".PATH_ALL.$title.'/001.jpg';
 
     $image = imagecreatefromjpeg($file);
 
@@ -96,7 +96,7 @@ function launch(){
 
     imagejpeg($image,__DIR__.'/facebook.jpg');
     imagedestroy($image);
-
+	
     $response = $fb->post(
         '/'.$pageId.'/photos',
         array (
