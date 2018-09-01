@@ -26,7 +26,7 @@ function check_routing(){
             home_page_upload();
             break;
         default:
-            $number != null ? displayImages(ltrim($number,"/")) : home_page();
+            $number != null ? displayImages(ltrim($number,"/")) : home_page_all();
     }
 }
 
