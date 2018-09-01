@@ -12,9 +12,11 @@
                     <?php echo TITLE; ?>
                 </a>
             </li>
+            <!--
             <li>
                 <a href="/">Best</a>
             </li>
+            -->
             <li>
                 <a href="/all">All</a>
             </li>
