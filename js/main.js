@@ -64,7 +64,7 @@ $(document).ready(function () {
             });
           });
 
-        reloadListPreference();
+        reloadListFavorite();
 
         var tags = getHidenTagsCookie();
         $.each($('.list-item'),function(){
@@ -474,50 +474,50 @@ function manageTag(){
   
 }
 
-function setPreferenceCookie(cvalue) {
+function setFavoriteCookie(cvalue) {
     $.cookie.json = true;
-    $.cookie("PreferenceList", cvalue, { expires : 365, path: '/'});
+    $.cookie("FavoriteList", cvalue, { expires : 365, path: '/'});
 }
 
-function getPreferenceCookie() {
+function getFavoriteCookie() {
     $.cookie.json = true;
-    return $.cookie("PreferenceList")
+    return $.cookie("FavoriteList")
 }
 
-function addPreference(id, name){
+function addFavorite(id, name){
     var pref = {}
-    if(getPreferenceCookie() !== undefined){
-        pref = getPreferenceCookie()
+    if(getFavoriteCookie() !== undefined){
+        pref = getFavoriteCookie()
     }
     pref[id] = name;
-    setPreferenceCookie(pref)
-    reloadListPreference();
+    setFavoriteCookie(pref)
+    reloadListFavorite();
     $(".pulse-div-add").hide();
     $(".pulse-div-remove").show();
 }
 
-function removePreference(id){
+function removeFavorite(id){
     var pref = {}
-    if(getPreferenceCookie() !== undefined){
-        pref = getPreferenceCookie()
+    if(getFavoriteCookie() !== undefined){
+        pref = getFavoriteCookie()
     }
     delete pref[id]
-    setPreferenceCookie(pref)
-    reloadListPreference();
+    setFavoriteCookie(pref)
+    reloadListFavorite();
     $(".pulse-div-remove").hide();
     $(".pulse-div-add").show();
 }
 
-function choosePreference(id){
+function chooseFavorite(id){
     newUrl = window.location.origin + "/all" +'?'+"number="+id
     window.location = newUrl;
 }
 
-function reloadListPreference(){
-    var dropdown = $(".dropdown-preference-select");
+function reloadListFavorite(){
+    var dropdown = $(".dropdown-favorite-select");
     dropdown.empty()
-    dropdown.append('<option value="" disabled selected>Your preference..</option>');
-    data = getPreferenceCookie();
+    dropdown.append('<option value="" disabled selected>Your favorite..</option>');
+    data = getFavoriteCookie();
     if(data === undefined){
         data = {}
     }

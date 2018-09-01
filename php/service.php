@@ -92,6 +92,7 @@ function home_page_about()
     echo '<h2>Hello World !</h2>';
     echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
     echo '<div><a>You can contact us at </a><span class="email">'.EMAIL.'</span></div>';
+    echo '<div><a>You can join us on <a class="email" href="'.CHANNEL_LINK.'">'.CHANNEL_NAME.'</a></a></div>';
     echo '<a style="font-weight:bold;">Use the search field ↑ for research in the tag list</a>';
     echo '<div id="list-tag"><h2>List of tags</h2><ul class="list" >';
     $tagNames = getAllTags();
@@ -211,8 +212,8 @@ function createDisplay($pathConst, $path){
     parse_str($parts['query'], $url );
     
     $id = $pathConst == PATH_ALL ? $url["number"] : getId($name);
-    echo '<div class="pulse-div-add"><button class="pulse" onclick="addPreference('.$id.','."'".$clearName."'".')">Add as preference</button></div>';
-    echo '<div class="pulse-div-remove"><button class="pulse" onclick="removePreference('.$id.')">Remove as preference</button></div>';
+    echo '<div class="pulse-div-add"><button class="pulse" onclick="addFavorite('.$id.','."'".$clearName."'".')">Add as favorite</button></div>';
+    echo '<div class="pulse-div-remove"><button class="pulse" onclick="removeFavorite('.$id.')">Remove as favorite</button></div>';
 
     $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$pathConst."'";
     echo '<h2 id="download-title"><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';

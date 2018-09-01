@@ -1000,18 +1000,18 @@ color: white;
     color:#E84A5F;
 }
 
- .container-preference {
+ .container-favorite {
     right: 0px;
     position: absolute;
     display: inline-block;
   }
   
-  .container-preference > .dropdown-preference {
+  .container-favorite > .dropdown-favorite {
     margin: 0 20px;
     vertical-align: top;
   }
   
-  .dropdown-preference {
+  .dropdown-favorite {
     display: inline-block;
     position: relative;
     overflow: hidden;
@@ -1029,7 +1029,7 @@ color: white;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);    
   }
   
-  .dropdown-preference:before, .dropdown-preference:after {
+  .dropdown-favorite:before, .dropdown-favorite:after {
     content: '';
     position: absolute;
     z-index: 2;
@@ -1042,18 +1042,18 @@ color: white;
     pointer-events: none;
   }
   
-  .dropdown-preference:before {
+  .dropdown-favorite:before {
     border-bottom-style: solid;
     border-top: none;
   }
   
-  .dropdown-preference:after {
+  .dropdown-favorite:after {
     margin-top: 7px;
     border-top-style: solid;
     border-bottom: none;
   }
   
-  .dropdown-preference-select {
+  .dropdown-favorite-select {
     position: relative;
     width: 130%;
     margin: 0;
@@ -1070,7 +1070,7 @@ color: white;
     -webkit-appearance: none; 
   }
   
-  .dropdown-preference-select:focus {
+  .dropdown-favorite-select:focus {
     z-index: 3;
     width: 100%;
     color: #394349;
@@ -1079,7 +1079,7 @@ color: white;
     outline-offset: -2px;
   }
   
-  .dropdown-preference-select > option {
+  .dropdown-favorite-select > option {
     margin: 3px;
     padding: 6px 8px;
     text-shadow: none;
@@ -1090,15 +1090,15 @@ color: white;
   
   /* Fix for IE 8 putting the arrows behind the select element. */
   
-  .lt-ie9 .dropdown-preference {
+  .lt-ie9 .dropdown-favorite {
     z-index: 1;
   }
   
-  .lt-ie9 .dropdown-preference-select {
+  .lt-ie9 .dropdown-favorite-select {
     z-index: -1;
   }
   
-  .lt-ie9 .dropdown-preference-select:focus {
+  .lt-ie9 .dropdown-favorite-select:focus {
     z-index: 3;
   }
   

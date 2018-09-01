@@ -29,10 +29,10 @@
         <div class="container-fluid">
             <a href="#menu-toggle" class="btn btn-secondary" id="menu-toggle">Menu</a>
             <input type="text" name="search" id="search" placeholder="Tags or name"><button class="searchButton" onclick="search()">Search</button>
-            <section class="container-preference">
-                <div class="dropdown-preference">
-                    <select class="dropdown-preference-select" onchange='choosePreference(this.value)'>
-                        <option value="" disabled selected>Your preference...</option>
+            <section class="container-favorite">
+                <div class="dropdown-favorite">
+                    <select class="dropdown-favorite-select" onchange='chooseFavorite(this.value)'>
+                        <option value="" disabled selected>Your favorite...</option>
                     </select>
                 </div>
             </section>
