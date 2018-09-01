@@ -151,11 +151,16 @@ function createContent($pageName, $pathConst){
             }
             $link = sizeof($allFolders)-array_search($name, $allFolders, true);
             $title = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)));
+            list($width, $height, $type, $attr) = getimagesize($pathConst . $name. "/" . $firstImage);
+            $bigThumbnail = '';
+            if($height > 2000){
+                $bigThumbnail = 'big-thumbnail';
+            }
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
                         <a href="'.$pageName.'?number=' . $link . '" class="d-block mb-4 h-100 img-cell">
                             <h5 class="img-name" title="' . $title . '">' . $title . '</h5>
-                            <img class="img-fluid img-thumbnail '.$blur.'" src="' . $pathConst . $name. "/" . $firstImage . '" alt="">
+                            <img class="img-fluid img-thumbnail '.$blur.' '.$bigThumbnail.'" src="' . $pathConst . $name. "/" . $firstImage . '" alt="">
                         </a>
                     </div>';
         }

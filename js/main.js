@@ -49,14 +49,6 @@ $(document).ready(function () {
         });
         flagLoad = true;
 
-        var img = document.getElementsByClassName("img-thumbnail");
-        for (var i = 0; i < img.length; i++) {
-            if (img[i].height > 1000) {
-                // Greater than 1000px in height
-                img[i].className = img[i].className + " big-thumbnail";
-            }
-        }
-
         $("#search").on("keyup", function() {
             var value = $(this).val().toLowerCase();
             $(".list li").filter(function() {
