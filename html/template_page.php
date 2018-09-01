@@ -21,6 +21,9 @@
                 <a href="/all">All</a>
             </li>
             <li>
+                <a href="/all/?number=<?= rand(1,count(scandirByModifiedDate(PATH_ALL))) ?>">Random</a>
+            </li>
+            <li>
                 <a href="/about">About</a>
             </li>
         </ul>

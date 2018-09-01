@@ -97,7 +97,7 @@ function home_page_about()
     echo '<div id="list-tag"><h2>List of tags</h2><ul class="list" >';
     $tagNames = getAllTags();
     foreach($tagNames as $tagName => $data){
-        echo '<li class="list-item" ><a class="list-item-link"><a class="about-tag">'.$tagName.' </a>( '.count($data).' )<a class="hide-tag" onclick="addHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a><a class="show-tag" onclick="removeHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a></a></li>';
+        echo '<li class="list-item" ><a class="about-tag">'.$tagName.' </a>( '.count($data).' )<a class="hide-tag" onclick="addHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a><a class="show-tag" onclick="removeHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a></li>';
     }
     echo "</ul></div></div>";
 }
