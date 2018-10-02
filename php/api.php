@@ -39,6 +39,7 @@ function launch(){
     $name = $json['title']['english'];
     $name = str_replace('/','',$name);
     $name = str_replace('?','⸮',$name);
+    $name = str_replace('&','§',$name);
     $name = str_replace('%','‰',$name);
     $name = str_replace('#','♯',$name);
     $name = str_replace('#','♯',$name);
@@ -52,7 +53,15 @@ function launch(){
         }
     }
 
-    $newPath = __DIR__ .'/'.PATH_ALL.$name.'/';
+    $result = array_diff(scandir(__DIR__ .'/'.PATH_ALL.$value), array(".", "..","index.php"));
+    $path = __DIR__ .'/'.PATH_ALL.end($result);
+    if(count(scandir(__DIR__ .'/'.PATH_ALL.$result[count($result)])) <= MAX_FOLDER_SIZE){
+        $minMax = explode('-',end($result));
+        mkdir(__DIR__ .'/'.PATH_ALL.($minMax[0]+MAX_FOLDER_SIZE)."-".($minMax[1]+MAX_FOLDER_SIZE - 1));
+        $path = __DIR__ .'/'.PATH_ALL.($minMax[0]+MAX_FOLDER_SIZE)."-".($minMax[1]+MAX_FOLDER_SIZE - 1);
+    }
+
+    $newPath = __DIR__ .'/'.$path.$name.'/';
 
     if (!file_exists($newPath)) {
         $result = mkdir($newPath, 0777, true);

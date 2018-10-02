@@ -13,6 +13,7 @@ const PATH_CACHE_ALL = "../database/cache_all.json";
 const PATH_CACHE_BEST = "../database/cache_best.json";
 const PATH_API_MEMORY = "../database/api_memory.json";
 const PAGINATION = 20;
+const MAX_FOLDER_SIZE = 100;
 const TITLE = "MyWebSite";
 const EMAIL = "exemple@gmail.com";
 const CHANNEL_NAME = "Facebook";

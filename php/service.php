@@ -150,7 +150,7 @@ function createContent($pageName, $pathConst){
                 $blur = "blur";
             }
             $link = sizeof($allFolders)-array_search($name, $allFolders, true);
-            $title = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)));
+            $title = str_replace('♯','#',str_replace('§','&',str_replace('‰','%',str_replace('⸮','?',$name))));
             list($width, $height, $type, $attr) = getimagesize($pathConst . $name. "/" . $firstImage);
             $bigThumbnail = '';
             if($height > 2000){
@@ -183,7 +183,7 @@ function createDisplay($pathConst, $path){
     $tagsOfName = getAllTagByFolder($name);
     $allTags = getAllTagsName();
     $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
-    $clearName = str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name)));
+    $clearName = str_replace('§','&',str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name))));
     echo "<h1>".$clearName."</h1><div class=\"row text-center text-lg-left\">";
     /*
     echo '<div class="tag-container">
