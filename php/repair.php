@@ -34,7 +34,7 @@ foreach ($result as $value) {
         $lastFolder = PATH_ALL.($min)."-".($max);
     }
     $success = mkdir($lastFolder.'/'.$value,0777, true);
-    if($success){
+    if($success || count(scandir($lastFolder.'/'.$value)) > 0){
         $count = 0;
         foreach (array_diff(scandir(PATH_ALL.$value), array(".", "..")) as $image) {
             $count++;
