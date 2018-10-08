@@ -72,7 +72,7 @@ function launch(){
             $min = $minMax[0]+MAX_FOLDER_SIZE;
             $max = $minMax[1]+MAX_FOLDER_SIZE;
         }
-        mkdir(__DIR__ .'/'.PATH_ALL.($min)."-".($max));
+        mkdir(__DIR__ .'/'.PATH_ALL.($min)."-".($max),0777, true);
         $path = __DIR__ .'/'.PATH_ALL.($min)."-".($max);
     }
 

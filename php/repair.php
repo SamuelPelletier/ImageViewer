@@ -30,10 +30,10 @@ foreach ($result as $value) {
             $min = $minMax[0]+MAX_FOLDER_SIZE;
             $max = $minMax[1]+MAX_FOLDER_SIZE;
         }
-        mkdir(PATH_ALL.($min)."-".($max));
+        mkdir(PATH_ALL.($min)."-".($max),0777, true);
         $lastFolder = PATH_ALL.($min)."-".($max);
     }
-    $success = mkdir($lastFolder.'/'.$value);
+    $success = mkdir($lastFolder.'/'.$value,0777, true);
     if($success){
         $count = 0;
         foreach (array_diff(scandir(PATH_ALL.$value), array(".", "..")) as $image) {
