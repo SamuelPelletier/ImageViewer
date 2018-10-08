@@ -53,16 +53,32 @@ function launch(){
         }
     }
 
-    $result = array_diff(scandir(__DIR__ .'/'.PATH_ALL.$value), array(".", "..","index.php"));
-    $path = __DIR__ .'/'.PATH_ALL.end($result);
-    if(count(scandir(__DIR__ .'/'.PATH_ALL.$result[count($result)])) <= MAX_FOLDER_SIZE){
-        $minMax = explode('-',end($result));
-        mkdir(__DIR__ .'/'.PATH_ALL.($minMax[0]+MAX_FOLDER_SIZE)."-".($minMax[1]+MAX_FOLDER_SIZE - 1));
-        $path = __DIR__ .'/'.PATH_ALL.($minMax[0]+MAX_FOLDER_SIZE)."-".($minMax[1]+MAX_FOLDER_SIZE - 1);
+    $folders = array_diff(scandir(__DIR__ .'/'.PATH_ALL), array(".", "..","index.php"));
+    $path = array_filter($folders,function($elem){
+        $pattern = "/^[0-9]*-[0-9]*$/"; 
+        if(preg_match($pattern, $elem)) {
+            return $elem;
+        }
+    });
+    $lastFolderName = end($path);
+    $path = __DIR__ .'/'.PATH_ALL.end($path);
+    // Size max or no folder found
+    if(count(scandir($path)) >= MAX_FOLDER_SIZE || $path == __DIR__ .'/'.PATH_ALL){
+        if($path == __DIR__ .'/'.PATH_ALL){
+            $min = 0;
+            $max = MAX_FOLDER_SIZE - 1;
+        }else{
+            $minMax = explode('-',$path);
+            $min = $minMax[0]+MAX_FOLDER_SIZE;
+            $max = $minMax[1]+MAX_FOLDER_SIZE;
+        }
+        mkdir(__DIR__ .'/'.PATH_ALL.($min)."-".($max));
+        $path = __DIR__ .'/'.PATH_ALL.($min)."-".($max);
     }
 
-    $newPath = __DIR__ .'/'.$path.$name.'/';
-
+    $url = $lastFolderName.'/'.$name.'/';
+    $newPath = $path."/".$name.'/';
+    
     if (!file_exists($newPath)) {
         $result = mkdir($newPath, 0777, true);
         if($result == false){
@@ -74,17 +90,5 @@ function launch(){
         }
     }
 
-    $str = file_get_contents(__DIR__ .'/'.PATH_DATABASE_TAGS_TEMP);
-    $listTag = json_decode($str, true);
-    foreach($tags as $tag){
-        if(!isset($listTag[$tag])){
-            $listTag[$tag] = array();
-        }
-        if(array_search($name, $listTag[$tag]) === false){
-            array_push($listTag[$tag],$name);
-        }
-    }
-    
-    $listTag = json_encode($listTag);
-    file_put_contents(__DIR__ .'/'.PATH_DATABASE_TAGS_TEMP,$listTag);
+    $idFolder = insertFolder($name,$nb_image,$url, $tags);
 }

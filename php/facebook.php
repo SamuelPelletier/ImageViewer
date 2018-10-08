@@ -1,5 +1,6 @@
 <?php
 include(__DIR__ ."/service.php");
+include(__DIR__."/database.php");
 
 launch();
 
@@ -19,8 +20,6 @@ function CallAPI($method, $url)
 }
 
 function launch(){
-    //switch tags.json with tags_temp.json
-    copy(__DIR__ ."/".PATH_DATABASE_TAGS_TEMP, __DIR__ ."/".PATH_DATABASE_TAGS);
 
     $appId = FACEBOOK_APP_ID;
     $appSecret = FACEBOOK_APP_SECRET;
@@ -35,28 +34,16 @@ function launch(){
     
     $fb->setDefaultAccessToken($accessToken);
 
-    $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
-    $dir = __DIR__."/".PATH_ALL;
-    $cache = __DIR__."/".PATH_CACHE_ALL;
-    $json = file_get_contents($cache);
-    $files = json_decode($json,true);
-    $files = array();
-    foreach (scandir($dir) as $key => $file) {
-        if (in_array($file, $ignored)) continue;
-        $files[$file] = filemtime($dir . '/' . $file);
-    }
-    arsort($files);
-    $files = array_keys($files);
-    file_put_contents($cache,json_encode($files));
-
-    foreach($files as $key => $file){
-        if(empty(array_intersect(getAllTagByFolder($file),PRIVATE_TAGS)) && $key != 0 && $key != 1){
+    $all = getAllFolder(true);
+    foreach($all as $one){
+        if(in_array(PRIVATE_TAGS,$one['tags'])){
+            $url = $one['url'];
+            $key = $one['id'];
             break;
         }
     }
 
-    $title = $files[$key];
-    $file = __DIR__."/".PATH_ALL.$title.'/001.jpg';
+    $file = $url.'/001.jpg';
 
     $image = imagecreatefromjpeg($file);
 
@@ -101,7 +88,7 @@ function launch(){
         '/'.$pageId.'/photos',
         array (
           'url' => URL_FACEBOOK_IMG,
-          'caption' => 'New '.FACEBOOK_NEW.' : '.$title."\n".'Link : '.FACEBOOK_LINK. (count($files) - $key),
+          'caption' => 'New '.FACEBOOK_NEW.' : '.$title."\n".'Link : '.FACEBOOK_LINK. $key,
         ),
         $accessToken
     );

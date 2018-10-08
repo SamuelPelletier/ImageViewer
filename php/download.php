@@ -6,15 +6,15 @@
  * Time: 18:58
  */
 include "./service.php";
-$name = $_GET["name"];
-$file = $_GET["path"].$name.'/';
-      $zip = new ZipArchive();
-      
-      if(is_dir($file))
-      {
-        // On teste si le dossier existe, car sans ça le script risque de provoquer des erreurs.
-	
-        if($zip->open($name.'.zip', ZipArchive::CREATE) == TRUE)
+$folder = getFolderById($_GET['id']);
+$file = PATH_ALL.$folder['url'].'/';
+$zip = new ZipArchive();
+
+if(is_dir($file))
+{
+	// On teste si le dossier existe, car sans ça le script risque de provoquer des erreurs.
+
+	if($zip->open($folder['name'].'.zip', ZipArchive::CREATE) == TRUE)
 	{
 	  // Ouverture de l’archive réussie.
 
@@ -36,14 +36,14 @@ $file = $_GET["path"].$name.'/';
 	  // On ferme l’archive.
 	  $zip->close();
 	
-	  // On peut ensuite, comme dans le tuto de DHKold, proposer le téléchargement.
+		// On peut ensuite, comme dans le tuto de DHKold, proposer le téléchargement.
 	  header('Content-Transfer-Encoding: binary'); //Transfert en binaire (fichier).
-	  header('Content-Disposition: attachment; filename="'.$name.'"'.".zip"); //Nom du fichier.
-	  header('Content-Length: '.filesize($name.'.zip')); //Taille du fichier.
+	  header('Content-Disposition: attachment; filename="'.$folder['name'].'"'.".zip"); //Nom du fichier.
+	  header('Content-Length: '.filesize($folder['name'].'.zip')); //Taille du fichier.
 	  
-			$test = readfile($name.'.zip');
+			$test = readfile($folder['name'].'.zip');
 			if($test != false){
-				unlink($name.'.zip');
+				unlink($folder['name'].'.zip');
 			}
 	}
 	else

@@ -1,5 +1,6 @@
 <?php
 include(__DIR__ ."/config.php");
+include(__DIR__."/database.php");
 
 //---------- Checker -----------
 
@@ -90,14 +91,14 @@ function home_page_about()
 
     echo "<h1>About</h1><div class='row text-center text-lg-left about'>";
     echo '<h2>Hello World !</h2>';
-    echo '<div>'.TITLE.' , it\'s '.count(scandirByModifiedDate(PATH_ALL)).' images folders ! </div>'; 
+    echo '<div>'.TITLE.' , it\'s '.count(getAllFolder()).' images folders ! </div>'; 
     echo '<div><a>You can contact us at </a><span class="email">'.EMAIL.'</span></div>';
     echo '<div><a>You can join us on <a class="email" href="'.CHANNEL_LINK.'">'.CHANNEL_NAME.'</a></a></div>';
     echo '<a style="font-weight:bold;">Use the search field ↑ for research in the tag list</a>';
     echo '<div id="list-tag"><h2>List of tags</h2><ul class="list" >';
-    $tagNames = getAllTags();
-    foreach($tagNames as $tagName => $data){
-        echo '<li class="list-item" ><a class="about-tag">'.$tagName.' </a>( '.count($data).' )<a class="hide-tag" onclick="addHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a><a class="show-tag" onclick="removeHidenTags('."'".$tagName."'".',$(this))">'.$svg.'</a></li>';
+    $tags = getAllTags(true);
+    foreach($tags as $tag){
+        echo '<li class="list-item" ><a class="about-tag">'.$tag['name'].' </a>( '.count(getByTags($tag['name'])).' )<a class="hide-tag" onclick="addHidenTags('."'".$tag['name']."'".',$(this))">'.$svg.'</a><a class="show-tag" onclick="removeHidenTags('."'".$tag['name']."'".',$(this))">'.$svg.'</a></li>';
     }
     echo "</ul></div></div>";
 }
@@ -134,16 +135,16 @@ function createContent($pageName, $pathConst){
     }else{
         $searchFolders = $allFolders;
     }
-
     $total = sizeof($searchFolders);
     $searchFolders = array_slice($searchFolders, ($page - 1) * PAGINATION, PAGINATION);
     $size = sizeof($searchFolders) < PAGINATION ? sizeof($searchFolders) : PAGINATION;
     if($size > 0){
         echo '<script>createPagination(' . PAGINATION . ',' . $total. ',' . $page . ')</script>';
-        for ($i = 0; $i < $size; $i++) {
-            $firstImage = array_values(array_diff(scandir($pathConst . "/" . $searchFolders[$i]), array(".", "..")))[0];
-            $name = $searchFolders[$i];
-            $tags = getAllTagByFolder($name);
+        foreach($searchFolders as $folder){
+            $name = $folder['name'];
+            $url = $folder['url'];
+            $firstImage = array_values(array_diff(scandir($pathConst . "/" . $url), array(".", "..")))[0];
+            $tags = $folder['tags'];
             $cookieTags = json_decode ($_COOKIE["HidenTags"]);
             $blur = "";
             if(count(array_intersect($tags, $cookieTags)) != 0){
@@ -151,16 +152,16 @@ function createContent($pageName, $pathConst){
             }
             $link = sizeof($allFolders)-array_search($name, $allFolders, true);
             $title = str_replace('♯','#',str_replace('§','&',str_replace('‰','%',str_replace('⸮','?',$name))));
-            list($width, $height, $type, $attr) = getimagesize($pathConst . $name. "/" . $firstImage);
+            list($width, $height, $type, $attr) = getimagesize($pathConst . $url. "/" . $firstImage);
             $bigThumbnail = '';
             if($height > 2000){
                 $bigThumbnail = 'big-thumbnail';
             }
             echo '
                 <div class="col-lg-3 col-md-4 col-xs-6">
-                        <a href="'.$pageName.'?number=' . $link . '" class="d-block mb-4 h-100 img-cell">
+                        <a href="'.$pageName.'?number=' . $folder['id'] . '" class="d-block mb-4 h-100 img-cell">
                             <h5 class="img-name" title="' . $title . '">' . $title . '</h5>
-                            <img class="img-fluid img-thumbnail '.$blur.' '.$bigThumbnail.'" src="' . $pathConst . $name. "/" . $firstImage . '" alt="">
+                            <img class="img-fluid img-thumbnail '.$blur.' '.$bigThumbnail.'" src="' . $pathConst . $url. "/" . $firstImage . '" alt="">
                         </a>
                     </div>';
         }
@@ -174,40 +175,15 @@ function createContent($pageName, $pathConst){
 }
 
 function createDisplay($pathConst, $path){
-    $tabs = scandirByModifiedDate($pathConst);
-    $path = $pathConst . $tabs[sizeof($tabs) - $path];
-    $tabs = array_diff(scandir($path), array(".", ".."));
-    $path_array = explode('/',$path);
-    $name = end($path_array);
+    $folder = getFolderById($path);
 
-    $tagsOfName = getAllTagByFolder($name);
-    $allTags = getAllTagsName();
-    $pathTag = "'/php/add_tag.php?name=" . urlencode($name) ."&tags="."'";
-    $clearName = str_replace('§','&',str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$name))));
+    $tagsOfName = $folder['tags'];
+    $clearName = str_replace('§','&',str_replace('♯','#',str_replace('‰','%',str_replace('⸮','?',$folder['name']))));
     echo "<h1>".$clearName."</h1><div class=\"row text-center text-lg-left\">";
-    /*
     echo '<div class="tag-container">
     <h4>Tags</h4>
-    <div class="dropdown">
-      <span class="add-tag">Add</span>
-      <span class="modify-tag">Modify</span>
-      <span class="valid-tag">Valid</span>
-      <span class="help-us">Help us by adding tags !</span>
-      <ul class="dropdown-menu">';
-    */
-    echo '<div class="tag-container">
-    <h4>Tags</h4>
-    <div class="dropdown">
-      <ul class="dropdown-menu">';
-      foreach($allTags as $tag){
-          if(in_array($tag,$tagsOfName) == true){
-        echo "<li class='added'>".$tag."</li>";
-          }else{
-        echo "<li>".$tag."</li>";
-          }
-        }
-      echo "</ul> </div><br>
-    <div class='tag-area'>";
+    <div class="dropdown"></div><br>';
+    echo "<div class='tag-area'>";
     foreach($tagsOfName as $tag){
         echo "<div class='tag'>".$tag."<span class='remove'>×</span></div>";
     }
@@ -216,28 +192,29 @@ function createDisplay($pathConst, $path){
     $parts = parse_url($_SERVER['HTTP_REFERER']);
     parse_str($parts['query'], $url );
     
-    $id = $pathConst == PATH_ALL ? $url["number"] : getId($name);
+    $id = $folder['id'];
     echo '<div class="pulse-div-add"><button class="pulse" onclick="addFavorite('.$id.','."'".$clearName."'".')">Add as favorite</button></div>';
     echo '<div class="pulse-div-remove"><button class="pulse" onclick="removeFavorite('.$id.')">Remove as favorite</button></div>';
 
-    $name = "'/php/download.php?name=" . urlencode($name) . "&path=".$pathConst."'";
-    echo '<h2 id="download-title"><a class="download" onclick="window.open('.$name.')"></a></h2><div class="row text-center text-lg-left">';
+    $download = "'/php/download.php?id=".$folder['id']."'";
+    echo '<h2 id="download-title"><a class="download" onclick="window.open('.$download.')"></a></h2><div class="row text-center text-lg-left">';
     
 
-
-    for ($i = 2; $i < sizeof($tabs) + 2; $i++) {
-        $src = $path . '/' . $tabs[$i];
+    $images = array_diff(scandir(PATH_ALL.$folder['url']),['.','..']);
+    $path = PATH_ALL.$folder['url'];
+    foreach($images as $image){
+        $src = $path.'/'.$image;
         $src = str_replace("'", "\'", $src);
         $src = "'" . $src . "'";
         echo '
             <div class="col-lg-3 col-md-4 col-xs-6">
                     <a href="#" class="d-block mb-4 h-100 img-cell" onclick="viewer(' . $src . ')">
-                        <img class="img-fluid img-thumbnail" src="' . $path . '/' .  $tabs[$i] . '" alt="">
+                        <img class="img-fluid img-thumbnail" src="' . $path . '/' .  $image . '" alt="">
                     </a>
                 </div>';
     }
     echo "</div>";
-    echo '<div style="display:none;" id="list">' . json_encode($tabs) . '</div>';
+    echo '<div style="display:none;" id="list">' . json_encode($images) . '</div>';
 }
 
 // --------- Other ----------
@@ -245,32 +222,11 @@ function createDisplay($pathConst, $path){
 
 function scandirByModifiedDate($dir)
 {
-    $page = check_page();
-    $ignored = array('.', '..', '.svn', '.htaccess', 'index.php');
-    $page--;
+    $files = array();
     if($dir == PATH_ALL){
-        $cache = PATH_CACHE_ALL;
-    }else if($dir == PATH){
-        $cache = PATH_CACHE_BEST;
+        $files = getAllFolder(true);
     }
-    // (Date last modif + 1 day) - date now
-    $diff_date = (filemtime($cache) + 86400) - time();
-    $json = file_get_contents($cache);
-    $files = json_decode($json,true);
-
-    // Last modif after one day
-    if($diff_date < 0 || count($files) == 0){
-        $files = array();
-        foreach (scandir($dir) as $key => $file) {
-            if (in_array($file, $ignored)) continue;
-            $files[$file] = filemtime($dir . '/' . $file);
-        }
-        arsort($files);
-        $files = array_keys($files);
-        file_put_contents($cache,json_encode($files));
-    }
-
-    return ($files) ? $files : false;
+    return $files;
 }
 
 function search($path, $allFolders, $name){
@@ -279,12 +235,12 @@ function search($path, $allFolders, $name){
     if($name == ''){
         return $allFolders;
     }
-    $partSearch = convertInWord($name);
+    $partSearch = explode(" ", $name);
 
     foreach($partSearch as $part){
         $temp = array();
         foreach($allFolders as $data){
-            if (strpos(strtoupper($data), strtoupper($part)) !== false) {
+            if (strpos(strtoupper($data['name']), strtoupper($part)) !== false) {
                 array_push($temp, $data);
             }
         }
@@ -311,94 +267,40 @@ function search($path, $allFolders, $name){
     return $result;
 }
 
-function getAllTags(){
-    // Read JSON file
-    $json = file_get_contents(PATH_DATABASE_TAGS);
-
-    //Decode JSON
-    $json_data = json_decode($json,true);
-    return $json_data;
-}
-
-function convertInWord($search){
-   return explode(" ", $search);
-}
-
-function getAllTagsName(){
-    $data = getAllTags();
-    $tags = array();
-    foreach($data as $tag =>$dataTag){
-        array_push($tags,$tag);
-    }
-    return $tags;
-}
-
-function getAllCompositeTagsName(){
-    $data = getAllTags();
-    $tags = array();
-    foreach($data as $tag =>$dataTag){
-        if(preg_match("/^[a-z]+\s/",$tag) == 1){
-            array_push($tags,$tag);
-        }
-    }
-    return $tags;
-}
-
 function getDataOfTag($search){
-    $tags = convertInWord($search);
-    $data = getAllTags();
-    $result = array();
+    $tags = getAllExistingTagsWithSearch($search);
+    $foldersByTag = array();
     foreach($tags as $tag){
-        if(array_key_exists($tag,$data)){
-            array_push($result,$data[$tag]);
+        $temp = getByTags($tag);
+        if(count($temp) > 0){
+            array_push($foldersByTag,$temp);
         }
-    }
-
-    if(count($tags) > 1){
-        $result = getDataOfCompositeTag($search, $result);
     }
     
-    if(count($result) == 1){
-        $result = $result[0];
-    }else if( count($result) == 0){
-    }else if(count($result) == 2){
-        $result = array_intersect($result[0],$result[1]);
-    }else{
-        $result = call_user_func_array('array_intersect',$result);
-    }
-    return array_reverse($result);
-}
-
-function getDataOfCompositeTag($search, $result){
-    $tagsName = getAllCompositeTagsName();
-    $data = getAllTags();
-    foreach($tagsName as $tag){
-        if(array_key_exists($tag,$data) && strpos($tag, $search) !== false) {
-            array_push($result,$data[$tag]);
-        }
-    }
-    return $result;
-}
-
-function getAllTagByFolder($name){
-    $tagsData = getAllTags();
     $result = array();
-    foreach($tagsData as $tagName => $data){
-        if(in_array($name,$data) == true){
-            array_push($result, $tagName);
+    foreach($foldersByTag as $folders){
+        foreach ($folders as $folder) {
+            if(!array_key_exists($folder['name'],$result)){
+                $result[$folder['name']] = $folder;
+            }
         }
     }
+
     return $result;
 }
 
-function getId($name){
-    $allFolders = scandirByModifiedDate(PATH_ALL);
-    $folderId;
-    foreach($allFolders as $id => $folder){
-        if($name === $folder){
-            $folderId = $id;
-            break;
+function getAllExistingTagsWithSearch($search){
+    $tags = explode(" ", $search);
+    $result = array();
+    foreach($tags as $tag){
+        if(tagExist($tag)){
+            array_push($result,$tag);
         }
     }
-    return sizeof($allFolders) - $folderId;
+    for($i = 0; $i < count($tags)-1; $i++){
+        if(tagExist($tags[$i].' '.$tags[$i+1])){
+            array_push($result,$tags[$i].' '.$tags[$i+1]);
+        }
+    }
+    return $result;
 }
