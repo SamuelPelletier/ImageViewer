@@ -19,6 +19,7 @@ function CallAPI($method, $url)
 }
 
 function launch(){
+    return;
     // if not 1 GO free
     if(disk_free_space ( __DIR__ .'/'.PATH_ALL )/1000000000 < 1){
         return;

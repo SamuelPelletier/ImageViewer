@@ -1,4 +1,5 @@
 <?php 
+set_time_limit(3600);
 include(__DIR__ ."/service.php");
 
 $result = array_diff(scandir(PATH_ALL), array(".", "..","index.php"));
@@ -18,20 +19,27 @@ foreach ($result as $value) {
             return $elem;
         }
     });
-    $lastFolderName = end($lastFolder);
-    $lastFolder = PATH_ALL.end($lastFolder);
-    if(count(scandir($lastFolder)) >= MAX_FOLDER_SIZE || $lastFolder == PATH_ALL){
+    $lastFolderName = $lastFolder[0];
+    foreach ($lastFolder as $folder) {
+        if(explode('-',$folder)[0] > explode('-',$lastFolderName)[0]){
+            $lastFolderName = $folder;
+        }
+    }
+    
+    $lastFolder = PATH_ALL.$lastFolderName;
+    if(count(array_diff(scandir($lastFolder), array(".", ".."))) >= MAX_FOLDER_SIZE || $lastFolder == PATH_ALL){
         // Error no folder found
         if($lastFolder == PATH_ALL){
             $min = 0;
             $max = MAX_FOLDER_SIZE - 1;
         }else{
-            $minMax = explode('-',$lastFolder);
+            $minMax = explode('-',$lastFolderName);
             $min = $minMax[0]+MAX_FOLDER_SIZE;
             $max = $minMax[1]+MAX_FOLDER_SIZE;
         }
         mkdir(PATH_ALL.($min)."-".($max),0777, true);
         $lastFolder = PATH_ALL.($min)."-".($max);
+        $lastFolderName = ($min)."-".($max);
     }
     $success = mkdir($lastFolder.'/'.$value,0777, true);
     if($success || count(scandir($lastFolder.'/'.$value)) > 0){
@@ -43,6 +51,9 @@ foreach ($result as $value) {
             }
         }
         $idFolder = insertFolder($value,$count,$lastFolderName.'/'.$value, getAllTagByFolder($value));
+        if($idFolder == NULL){
+            die;
+        }
         rmdir(PATH_ALL.$value);
     }
 }

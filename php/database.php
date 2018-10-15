@@ -5,12 +5,13 @@ const PROPERTY = "folder.id,folder.name,folder.date_add,folder.count_pages,folde
 function connexion(){
     $result = false;
     try {
-        $conn = new PDO("mysql:host=".DATABASE_SERVER_NAME.";dbname=image_viewer", DATABASE_USERNAME, DATABASE_PASSWORD);
+        $conn = new PDO("mysql:host=".DATABASE_SERVER_NAME.";dbname=".DATABASE_NAME, DATABASE_USERNAME, DATABASE_PASSWORD);
         // set the PDO error mode to exception
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $result = $conn;
         //echo "Connected successfully"; 
     }catch(PDOException $e){
+        //var_dump($e->getMessage());
         //echo "Connection failed: " . $e->getMessage();
     }
     return $result;
@@ -24,7 +25,7 @@ function getAllFolder($byDate = false){
     }
     $sql =  'SELECT '.PROPERTY.' FROM folder where count_pages <> 0';
     if($byDate == true){
-        $sql .= ' order by date_add desc';
+        $sql .= ' order by date_add desc,id desc';
     }
     $folders = array();
     foreach  ($conn->query($sql) as $row) {
@@ -114,6 +115,9 @@ function convertRow($row){
 }
 
 function insertFolder($name,$countPages,$url,$tags){
+    $name = str_replace("'","\'",$name);
+    $url = str_replace("'","\'",$url);
+
     $conn = connexion();
     if($conn == false){
         return NULL;
@@ -149,6 +153,7 @@ function insertFolder($name,$countPages,$url,$tags){
 }
 
 function insertTag($tagName){
+    $tagName =str_replace("'","\'",$tagName);
     $conn = connexion();
     if($conn == false){
         return NULL;
