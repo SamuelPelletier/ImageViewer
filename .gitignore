@@ -3,7 +3,7 @@ media/all/
 media/autre/
 import/
 database/
-php/config_prod.php
+php/config.prod.php
 .idea/
 vendor/
 composer.lock

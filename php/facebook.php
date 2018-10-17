@@ -34,7 +34,7 @@ function launch(){
     
     $fb->setDefaultAccessToken($accessToken);
 
-    $all = getAllFolder(true);
+    $all = getAllFolder($total,true);
     foreach($all as $one){
         if(in_array(PRIVATE_TAGS,$one['tags'])){
             $url = $one['url'];

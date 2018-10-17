@@ -18,15 +18,22 @@ function connexion(){
 }
 
 
-function getAllFolder($byDate = false){
+function getAllFolder(&$total,$byDate = false,$page = -1){
     $conn = connexion();
     if($conn == false){
         return array();
     }
+
+    $limit = '';
+    if($page != -1){
+        $limit = ' limit '.(($page-1)*PAGINATION).','.PAGINATION;
+    }
+
     $sql =  'SELECT '.PROPERTY.' FROM folder where count_pages <> 0';
     if($byDate == true){
         $sql .= ' order by date_add desc,id desc';
     }
+    $sql .= $limit;
     $folders = array();
     foreach  ($conn->query($sql) as $row) {
         $row = convertRow($row);
@@ -38,6 +45,13 @@ function getAllFolder($byDate = false){
         $row['tags'] = $tags;
         array_push($folders,$row);
     }
+
+    $sql = "SELECT count(id) AS max_folder from folder;";
+    foreach  ($conn->query($sql) as $row) {
+        $total = $row['max_folder'];
+        break;
+    }
+
     return $folders;
 }
 
@@ -218,21 +232,30 @@ function tagExist($tag){
     return false;
 }
 
-/*
-function search($string){
+function search($string, &$total, $page = -1){
     $conn = connexion();
     if($conn == false){
         return array();
     }
-    $words = explode(" ",$string);
-    $condition = "";
-    foreach($words as $key => $word){
-        if($key == 0){
-            $condition .= " or ";
-        }
-        $condition .= " where name like '%".$word."%' ";
+
+    $limit = '';
+    if($page != -1){
+        $limit = ' limit '.(($page-1)*PAGINATION).','.PAGINATION;
     }
-    $sql =  'SELECT '.PROPERTY.' FROM folder '.$condition;
+
+    $string = trim(substr($string, 1,strlen($string)-2));
+    $arrayString = explode(" ",$string);
+    $newArrayString = $arrayString;
+    for($i = 0; $i < count($arrayString)-1; $i++){
+        if(tagExist($arrayString[$i]." ".$arrayString[$i+1])){
+            array_push($newArrayString,$arrayString[$i]." ".$arrayString[$i+1]);
+        }
+    }
+
+    $whereTags = convertArrayInString($newArrayString);
+
+    $sql =  'SELECT distinct '.PROPERTY.' FROM folder left join folder_tag on folder.id = id_folder left join tag on id_tag = tag.id where folder.count_pages and (folder.name like \'%'.$string.'%\' or tag.name in '.$whereTags.')'.' order by date_add desc,folder.id desc'.$limit;
+
     $folders = array();
     foreach  ($conn->query($sql) as $row) {
         $row = convertRow($row);
@@ -244,6 +267,12 @@ function search($string){
         $row['tags'] = $tags;
         array_push($folders,$row);
     }
+
+    $sql = 'SELECT distinct count(folder.id) as "max_folder" FROM folder left join folder_tag on folder.id = id_folder left join tag on id_tag = tag.id where folder.count_pages <> 0 and (folder.name like \'%'.$string.'%\' or tag.name in '.$whereTags.')'.' order by date_add desc,folder.id desc';
+    foreach  ($conn->query($sql) as $row) {
+        $total = $row['max_folder'];
+        break;
+    }
     return $folders;
 }
-*/
+

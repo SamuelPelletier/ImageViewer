@@ -5,6 +5,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 const DATABASE_SERVER_NAME = "localhost";
 const DATABASE_USERNAME = "root";
 const DATABASE_PASSWORD = "";
+const DATABASE_NAME = "image_viewer";
 const PATH = "../media/autre/";
 const PATH_IMPORT = "../import/";
 const PATH_ALL = "../media/all/";

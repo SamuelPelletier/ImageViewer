@@ -58,3 +58,18 @@ foreach ($result as $value) {
     }
 }
 
+function getAllTagByFolder($name){
+    // Read JSON file
+    $json = file_get_contents(PATH_DATABASE_TAGS);
+
+    //Decode JSON
+    $tagsData = json_decode($json,true);
+    $result = array();
+    foreach($tagsData as $tagName => $data){
+        if(in_array($name,$data) == true){
+            array_push($result, $tagName);
+        }
+    }
+    return $result;
+}
+
