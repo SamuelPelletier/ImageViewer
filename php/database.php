@@ -276,3 +276,18 @@ function search($string, &$total, $page = -1){
     return $folders;
 }
 
+function countFolder(){
+    $conn = connexion();
+    if($conn == false){
+        return NULL;
+    }
+    $sql =  'SELECT count(id) as "total" FROM folder where count_pages <> 0';
+    $result = 0;
+    foreach  ($conn->query($sql) as $row) {
+        $result = $row['total'];
+        break;
+
+    }
+    return $result;
+}
+

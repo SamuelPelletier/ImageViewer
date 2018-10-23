@@ -478,6 +478,7 @@ li:last-child .page {
     color: #007bff;
     position: relative;
     margin: 10px 7px;
+    margin-left: 0px;
     padding: 5px 70px;
     font-weight: 700;
     font-size: 15px;
@@ -694,6 +695,12 @@ li:last-child .page {
 }
 #search::-webkit-input-placeholder {
 	color: #999;
+}
+
+@media only screen and (max-width: 400px) {
+    .searchButton{
+        display: none;
+    }
 }
 
 .searchButton {
@@ -1000,12 +1007,18 @@ color: white;
     color:#E84A5F;
 }
 
- .container-favorite {
+.container-favorite {
     right: 0px;
     position: absolute;
     display: inline-block;
   }
-  
+
+@media only screen and (max-width: 520px) {
+    .container-favorite {
+        display: block;
+    }
+}
+
   .container-favorite > .dropdown-favorite {
     margin: 0 20px;
     vertical-align: top;
@@ -1052,7 +1065,7 @@ color: white;
     border-top-style: solid;
     border-bottom: none;
   }
-  
+
   .dropdown-favorite-select {
     position: relative;
     width: 130%;
@@ -1130,12 +1143,14 @@ color: white;
     font: inherit;
     line-height: 1;
     margin: 0.5em;
+    margin-left: 0px;
     padding: 1em 1em;
     clear: left;
   }
 
   .pulse-div-add, .pulse-div-remove{
       width: 100%;
+      display: flex;
   }
 
   .dropbtn {

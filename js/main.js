@@ -20,15 +20,7 @@ $( window ).on( "load", function() {
 
 
 $(document).ready(function () {
-    var url;
-    var websiteURL = document.URL;
-    if (websiteURL.includes("import") || websiteURL.includes("about") || websiteURL.includes("upload")) {
-        url = "../html/template_page.php";
-    } else if (websiteURL.includes("all")) {
-        url = "../../html/template_page.php";
-    } else {
-        url = "html/template_page.php";
-    }
+    var url = "/html/template_page.php";
 
     $.get(url, function (data) {
         $(".loader").fadeOut("slow");
@@ -79,7 +71,7 @@ function search(){
     if('number' in param){
         delete param['number'];
     }
-    var pathname = window.location.pathname == "/about" ||  window.location.pathname == "/about/" ? "/all" : window.location.pathname;
+    var pathname = window.location.pathname == "/about" ||  window.location.pathname == "/about/" ? "/" : window.location.pathname;
     if('search' in param || Object.keys(param).length > 0){
         if(param['page'] > 1){
             param['page'] = 1
@@ -501,7 +493,7 @@ function removeFavorite(id){
 }
 
 function chooseFavorite(id){
-    newUrl = window.location.origin + "/all" +'?'+"number="+id
+    newUrl = window.location.origin + "/" +'?'+"number="+id
     window.location = newUrl;
 }
 

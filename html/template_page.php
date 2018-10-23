@@ -12,16 +12,11 @@
                     <?php echo TITLE; ?>
                 </a>
             </li>
-            <!--
             <li>
-                <a href="/">Best</a>
-            </li>
-            -->
-            <li>
-                <a href="/all">All</a>
+                <a href="/">All</a>
             </li>
             <li>
-                <a href="/all/?number=<?php $folders = getAllFolder($total); echo $folders[array_rand($folders)]['id'] ?>">Random</a>
+                <a href="/?number=<?php $folders = getAllFolder($total); echo $folders[array_rand($folders)]['id'] ?>">Random</a>
             </li>
             <li>
                 <a href="/about">About</a>
