@@ -178,15 +178,31 @@ li:last-child .page {
     margin: auto auto;
     position: relative;
     height: 98%;
+    width: 98%;
     z-index: 1;
     top:1%;
 }
 
-.container-img > img {
+.imgViewer {
     height: 100%;
+    width: auto;
     display: block;
     margin-left: auto;
     margin-right: auto;
+
+}
+
+@media only screen and (max-width: 767px) {
+    .imgViewer {
+        height: auto;
+        width: 100%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        top: 8em;
+        position: relative;
+
+    }
 }
 
 .control{
@@ -198,6 +214,13 @@ li:last-child .page {
     top:90%;
     left: 25%;
     right: 25%;
+}
+
+@media only screen and (max-width: 767px) {
+    .control{
+        width:100%;
+        left: 0em;
+    }
 }
 
 .control > div{
