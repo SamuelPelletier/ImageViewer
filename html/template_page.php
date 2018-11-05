@@ -15,9 +15,11 @@
             <li>
                 <a href="/">All</a>
             </li>
+           <!--
             <li>
-                <a href="/?number=<?php $folders = getAllFolder($total); echo $folders[array_rand($folders)]['id'] ?>">Random</a>
+                <a href="/all/?number=10">Random</a>
             </li>
+            -->
             <li>
                 <a href="/about">About</a>
             </li>
